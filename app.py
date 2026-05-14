@@ -4824,8 +4824,7 @@ function aplicarTema(nombre) {
     const savedVip = (()=>{try{return localStorage.getItem('rankingVIP_vip')||'VIP';}catch(e){return 'VIP';}})();
     const mainLogo = document.getElementById('main-logo'); if(mainLogo) mainLogo.innerHTML = `RANKING <span class="vip" id="logo-vip">${savedVip}</span>`;
     if (tl) {
-
-      else if (nombre==='touchofpink') tl.innerHTML=`<div style="text-align:center;"><div style="font-family:'Oswald',sans-serif;font-size:clamp(18px,2.8vw,30px);font-weight:700;letter-spacing:6px;color:#fff;text-shadow:0 0 12px rgba(255,255,255,0.9);">JAGGER CLUB</div><div style="font-family:'Oswald',sans-serif;font-size:clamp(13px,2vw,22px);font-weight:600;letter-spacing:5px;color:#f472b6;margin-top:3px;text-shadow:0 0 10px rgba(244,114,182,1);">TURNS PINK</div></div>`;
+      if (nombre==='touchofpink') tl.innerHTML=`<div style="text-align:center;"><div style="font-family:'Oswald',sans-serif;font-size:clamp(18px,2.8vw,30px);font-weight:700;letter-spacing:6px;color:#fff;text-shadow:0 0 12px rgba(255,255,255,0.9);">JAGGER CLUB</div><div style="font-family:'Oswald',sans-serif;font-size:clamp(13px,2vw,22px);font-weight:600;letter-spacing:5px;color:#f472b6;margin-top:3px;text-shadow:0 0 10px rgba(244,114,182,1);">TURNS PINK</div></div>`;
       else tl.innerHTML=`<div style="text-align:center;"><div style="font-family:'Oswald',sans-serif;font-size:clamp(14px,2.2vw,24px);font-weight:700;letter-spacing:4px;color:#e8c84a;text-shadow:0 0 14px rgba(232,200,74,0.9);">JAGGER CLUB · 12 AÑOS</div><div style="font-family:'Oswald',sans-serif;font-size:clamp(11px,1.6vw,17px);font-weight:600;letter-spacing:3px;color:#e8c84a;opacity:0.75;margin-top:2px;">12 AÑOS DE HISTORIA NO SON PARA CUALQUIERA</div></div>`;
     }
     const toggleWrap = document.getElementById('tema-deco-toggle');
@@ -5319,6 +5318,7 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
 
 <!-- Publicidad overlay -->
 <div id="pub-overlay">
+  <button onclick="cerrarPublicidad()" style="position:fixed;top:18px;right:22px;z-index:10502;background:rgba(0,0,0,0.7);color:#aaa;border:1px solid #444;font-size:22px;cursor:pointer;border-radius:8px;width:40px;height:40px;line-height:1;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#aaa'">✕</button>
   <video id="pub-video" autoplay playsinline style="display:none;width:100%;height:100%;object-fit:contain;background:#000;"></video>
   <iframe id="pub-iframe" allow="autoplay;fullscreen" allowfullscreen style="display:none;width:100%;height:100%;border:none;"></iframe>
 </div>
@@ -5771,9 +5771,14 @@ function mostrarPublicidadSync(url, offsetSegundos) {
     video.load();
   }
   video.onended = cerrarPublicidad;
+  video.onerror = function() { cerrarPublicidad(); };
+  // Safety timeout: auto-close after 3 minutes max
+  clearTimeout(window._pubSafetyTimer);
+  window._pubSafetyTimer = setTimeout(cerrarPublicidad, 3 * 60 * 1000);
 }
 
 function cerrarPublicidad() {
+  clearTimeout(window._pubSafetyTimer);
   const overlay = document.getElementById('pub-overlay');
   const video = document.getElementById('pub-video');
   const iframe = document.getElementById('pub-iframe');
