@@ -591,14 +591,7 @@ body.tema-jagger12 .live-dot{background:#c9a227;}
 body.tema-jagger12 .col-nombre{color:#fff !important;}
 body.tema-jagger12 .col-mesa{color:#ddd !important;}
 
-/* ══ TEMA JAGGER AWARDS ══ */
-body.tema-jaggerawards .rank-row{border-color:#2a1c00;}
-body.tema-jaggerawards .rank-row.rank-1{background:#1a1200;border-color:#c9a227;}
-body.tema-jaggerawards .pres-line{background:linear-gradient(to right,transparent,#c9a227,transparent);}
-body.tema-jaggerawards .live-dot{background:#c9a227;}
-body.tema-jaggerawards .live-badge{border-color:#3a2a00;color:#c9a227;}
-body.tema-jaggerawards .col-nombre{color:#ffffff !important;}
-body.tema-jaggerawards .col-mesa{color:#e8c84a !important;}
+
 
 /* ══ TEMA A TOUCH OF PINK ══ */
 body.tema-touchofpink .rank-header{background:#2d0022;border-color:#6a2050;}
@@ -705,9 +698,7 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
       <button onclick="aplicarTema('jagger12')" style="background:#000;border:2px solid #333;border-radius:10px;padding:16px 10px;cursor:pointer;text-align:center;color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:1px;font-size:13px;transition:all .2s;" onmouseover="this.style.borderColor='#888'" onmouseout="this.style.borderColor='#333'">
         <div style="font-size:28px;margin-bottom:6px;">🥂</div>JAGGER 12 AÑOS
       </button>
-      <button onclick="aplicarTema('jaggerawards')" style="background:linear-gradient(135deg,#0a0800,#1a1400);border:2px solid #c9a227;border-radius:10px;padding:16px 10px;cursor:pointer;text-align:center;color:#c9a227;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:1px;font-size:13px;transition:all .2s;" onmouseover="this.style.borderColor='#e8c84a'" onmouseout="this.style.borderColor='#c9a227'">
-        <div style="font-size:28px;margin-bottom:6px;">🏆</div>JAGGER AWARDS
-      </button>
+
       <button onclick="aplicarTema('touchofpink')" style="background:linear-gradient(135deg,#140010,#2a0020);border:2px solid #9d174d;border-radius:10px;padding:16px 10px;cursor:pointer;text-align:center;color:#f472b6;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:1px;font-size:13px;transition:all .2s;" onmouseover="this.style.borderColor='#f472b6'" onmouseout="this.style.borderColor='#9d174d'">
         <div style="font-size:28px;margin-bottom:6px;">🌸</div>TURNS PINK
       </button>
@@ -727,7 +718,7 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
 
       <div id="falling-gloves-toggle" style="display:none;">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:13px;color:#888;letter-spacing:1px;">
-          <input type="checkbox" id="toggle-falling-gloves" onchange="fallingGlovesActivos=this.checked;if(!this.checked){const w=document.getElementById('awards-particles');if(w){[...w.children].filter(el=>el.textContent==='🥊').forEach(g=>g.remove());}}else{iniciarLluviaAwards();}fetch('/api/design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({falling_gloves:this.checked})}).catch(()=>{});showToast(this.checked?'🥊 Guantes cayendo activados':'Guantes cayendo desactivados');" style="width:16px;height:16px;accent-color:#ff2222;" checked />
+          <input type="checkbox" id="toggle-falling-gloves" onchange="fallingGlovesActivos=this.checked;fetch('/api/design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({falling_gloves:this.checked})}).catch(()=>{});showToast(this.checked?'✨ Lluvia activada':'Lluvia desactivada');" style="width:16px;height:16px;accent-color:#ff2222;" checked />
           <span>🥊 Guantes cayendo (lluvia de guantes)</span>
         </label>
       </div>
@@ -876,16 +867,7 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
     <button class="btn-custom-save" onclick="aplicarPersonalizacion()">✓ Aplicar cambios</button>
   </div>
 
-  <!-- PINs de acceso -->
-  <div class="custom-section" style="margin-top:18px;">
-    <div class="custom-section-title">🔒 PINs de acceso</div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:14px;">
-      <div style="font-size:11px;color:#555;letter-spacing:1px;">Cambiá los PINs de acceso a cada sección. Todos deben ser exactamente 4 dígitos.</div>
-      <div id="pines-list" style="display:flex;flex-direction:column;gap:10px;"></div>
-      <button onclick="guardarPines()" style="background:#c9a227;color:#000;border:none;border-radius:6px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:background .15s;" onmouseover="this.style.background='#e8c84a'" onmouseout="this.style.background='#c9a227'">💾 Guardar PINs</button>
-      <div id="pwd-msg" style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:1px;min-height:18px;"></div>
-    </div>
-  </div>
+
 </div>
 
 <!-- ══ PANEL PUBLICIDAD ══ -->
@@ -1915,7 +1897,7 @@ function mostrarGanador() {
 
   // Icono: boxeo = guantes + trofeo, default = corona
   const coronaEl = document.getElementById('winner-corona');
-  if (coronaEl) coronaEl.textContent = temaActual==='jaggerawards' ? '🏆✦🏆' : '👑';
+  if (coronaEl) coronaEl.textContent = '👑';
 
   const nombreEl = document.getElementById('winner-nombre');
   const totalEl  = document.getElementById('winner-total');
@@ -2590,7 +2572,7 @@ function renderPantalla() {
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
   // ── Detectar KO animación (solo tema boxeo) ──
-  if (temaActual === 'jaggerawards' && koAnimActiva && prevRankOrder.length > 0) {
+  if (false && koAnimActiva && prevRankOrder.length > 0) {
     const suben = names.filter((n,i) => { const p = prevRankOrder.indexOf(n); return p !== -1 && p > i; });
     const bajan = names.filter((n,i) => { const p = prevRankOrder.indexOf(n); return p !== -1 && p < i; });
     if (suben.length >= 1 && bajan.length >= 1) {
@@ -3181,11 +3163,7 @@ const TEMAS_EXTRA = {
     bodyClass: 'tema-jagger12',
     particleLabel: 'Activar burbujas de champagne'
   },
-  jaggerawards: {
-    colors: {'--black':'#040400','--surface':'#0c0b00','--border':'#3a2a00','--gold':'#c9a227','--gold-light':'#e8c84a','--gold-dim':'#7a6010','--text':'#f8f0d8','--text-dim':'#6a5a20','--white':'#ffffff'},
-    bodyClass: 'tema-jaggerawards',
-    particleLabel: 'Activar brillo de premios'
-  },
+
   touchofpink: {
     colors: {'--black':'#2d0020','--surface':'#480035','--border':'#8a3070','--gold':'#f472b6','--gold-light':'#fbb6ce','--gold-dim':'#e896cc','--text':'#ffe8f5','--text-dim':'#ddaacc','--white':'#ffffff'},
     bodyClass: 'tema-touchofpink',
@@ -3209,7 +3187,7 @@ let pinkModoClaro = false;
 
 function aplicarTema(nombre) {
   const temaExtra = TEMAS_EXTRA[nombre];
-  document.body.classList.remove('tema-fullblack','tema-navidad','tema-anonuevo','tema-halloween','tema-jagger12','tema-jaggerawards','tema-touchofpink','pink-claro');
+  document.body.classList.remove('tema-fullblack','tema-navidad','tema-anonuevo','tema-halloween','tema-jagger12','tema-touchofpink','pink-claro');
   pinkModoClaro = false;
   const overlay = document.getElementById('tema-overlay');
   overlay.innerHTML = ''; overlay.style.opacity = '0';
@@ -3227,11 +3205,11 @@ function aplicarTema(nombre) {
     temaActual = nombre;
     // Show/hide punch animation toggle
     const fallingToggle = document.getElementById('falling-gloves-toggle');
-    if (fallingToggle) fallingToggle.style.display = nombre === 'jaggerawards' ? 'block' : 'none';
+    if (fallingToggle) fallingToggle.style.display = 'none';
     const koToggle = document.getElementById('ko-anim-toggle');
-    if (koToggle) koToggle.style.display = nombre === 'jaggerawards' ? 'block' : 'none';
+    if (koToggle) koToggle.style.display = 'none';
     const show12Toggle = document.getElementById('show-12-toggle');
-    if (show12Toggle) show12Toggle.style.display = (nombre === 'jagger12' || nombre === 'jaggerawards') ? 'block' : 'none';
+    if (show12Toggle) show12Toggle.style.display = nombre === 'jagger12' ? 'block' : 'none';
     const pinkPetTog = document.getElementById('pink-petalos-toggle');
     if (pinkPetTog) pinkPetTog.style.display = nombre === 'touchofpink' ? 'block' : 'none';
     const pinkModoTog = document.getElementById('pink-modo-toggle');
@@ -3243,12 +3221,7 @@ function aplicarTema(nombre) {
     const mainLogo = document.getElementById('main-logo');
     if (mainLogo) mainLogo.innerHTML = `RANKING <span class="vip" id="logo-vip">${savedVip}</span>`;
     if (tl) {
-      if (nombre === 'jaggerawards') {
-        tl.innerHTML = `<div style="text-align:center;line-height:1.3;">
-          <div style="font-family:'Oswald',sans-serif;font-size:clamp(14px,2.2vw,24px);font-weight:700;letter-spacing:4px;color:#ff2222;text-shadow:0 0 14px rgba(255,34,34,0.9),0 0 30px rgba(255,34,34,0.5);">JAGGER CLUB · 12 AÑOS</div>
-          <div style="font-family:'Oswald',sans-serif;font-size:clamp(11px,1.6vw,17px);font-weight:600;letter-spacing:3px;color:#ff2222;opacity:0.75;text-shadow:0 0 10px rgba(255,34,34,0.6);margin-top:2px;">12 AÑOS DE HISTORIA NO SON PARA CUALQUIERA</div>
-        </div>`;
-      } else if (nombre === 'touchofpink') {
+      if (nombre === 'touchofpink') {
         tl.innerHTML = `<div style="text-align:center;line-height:1.3;">
           <div style="font-family:'Oswald',sans-serif;font-size:clamp(18px,2.8vw,30px);font-weight:700;letter-spacing:6px;color:#ffffff;text-shadow:0 0 12px rgba(255,255,255,0.9),0 0 28px rgba(255,255,255,0.5),0 0 50px rgba(244,114,182,0.4);">JAGGER CLUB</div>
           <div style="font-family:'Oswald',sans-serif;font-size:clamp(13px,2vw,22px);font-weight:600;letter-spacing:5px;color:#f472b6;margin-top:3px;text-shadow:0 0 10px rgba(244,114,182,1),0 0 24px rgba(244,114,182,0.7),0 0 50px rgba(244,114,182,0.4);">TURNS PINK</div>
@@ -3265,7 +3238,7 @@ function aplicarTema(nombre) {
     if (toggleWrap) {
       toggleWrap.style.display = 'flex';
       const decoLabel = nombre === 'jagger12' ? 'Activar burbujas de champagne' :
-                        nombre === 'jaggerawards' ? 'Activar brillo de premios' :
+                        
                         'Activar decoraciones animadas';
       document.getElementById('toggle-deco-label').textContent = decoLabel;
       document.getElementById('toggle-deco').checked = decoActiva;
@@ -3303,16 +3276,7 @@ function aplicarTema(nombre) {
 function toggleDecoActual(checked) {
   decoActiva = checked;
   fetch('/api/design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deco_activa:checked})}).catch(()=>{});
-  if (temaActual === 'jaggerawards') {
-    // En boxeo, el toggle controla chispas pero los guantes de fondo siempre están
-    if (!checked) {
-      const wrap = document.getElementById('awards-particles');
-      if (wrap) wrap.innerHTML = ''; // limpiar chispas/lluvia
-    } else {
-      iniciarChispasAwards();
-      if (fallingGlovesActivos) iniciarLluviaAwards();
-    }
-  } else if (temaActual === 'jagger12') {
+  if (temaActual === 'jagger12') {
     // En aniversario, solo controla las burbujas animadas (no el 12 de fondo)
     const wrap = document.getElementById('jagger12-particles');
     if (!checked) {
@@ -3381,8 +3345,6 @@ function actualizar12Overlay() {
       if (particles && particles.nextSibling) overlay.insertBefore(svg, particles.nextSibling);
       else overlay.appendChild(svg);
     }
-  } else if (temaActual === 'jaggerawards') {
-    reiniciarDeco12();
   }
 }
 
@@ -3392,9 +3354,6 @@ function iniciarDecoTema(nombre) {
   if (nombre === 'jagger12') {
     overlay.innerHTML = '';
     iniciarJagger12Deco();
-  }
-  if (nombre === 'jaggerawards') {
-    iniciarJaggerAwardsDeco();
   }
   if (nombre === 'touchofpink') {
     overlay.innerHTML = `
@@ -3477,79 +3436,7 @@ function iniciarJagger12Deco() {
 
 function reiniciarDeco12() {
   if (temaActual === 'jagger12') iniciarJagger12Deco();
-  else if (temaActual === 'jaggerawards') { /* awards deco managed by iniciarJaggerAwardsDeco */ }
-}
 
-function iniciarJaggerAwardsDeco() {
-  const overlay = document.getElementById('tema-overlay');
-  overlay.innerHTML = `
-    <div id="awards-particles" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div>
-    <!-- J grande de fondo — dorada, centrada -->
-    <svg id="svg-j-awards" width="100%" height="100%" viewBox="0 0 1000 700" style="position:absolute;inset:0;pointer-events:none;opacity:0.13;animation:awardsJPulse 4s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-      <text x="500" y="520" text-anchor="middle" dominant-baseline="auto" font-family="Georgia,serif" font-weight="900" font-size="700" fill="#c9a227" letter-spacing="-20">J</text>
-    </svg>
-    <!-- Líneas decorativas horizontales doradas -->
-    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.06;" xmlns="http://www.w3.org/2000/svg">
-      <line x1="0" y1="12%" x2="100%" y2="12%" stroke="#c9a227" stroke-width="1"/>
-      <line x1="0" y1="88%" x2="100%" y2="88%" stroke="#c9a227" stroke-width="1"/>
-    </svg>
-    <!-- AWARDS texto superior -->
-    <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);font-family:'Oswald',sans-serif;font-size:12px;color:#c9a227;opacity:0.18;letter-spacing:10px;text-transform:uppercase;white-space:nowrap;pointer-events:none;">✦ JAGGER AWARDS ✦</div>
-    <!-- Trofeos en las esquinas -->
-    <div style="position:absolute;bottom:10px;left:24px;font-size:60px;opacity:0.12;pointer-events:none;animation:awardsFloat 5s ease-in-out infinite;">🏆</div>
-    <div style="position:absolute;bottom:10px;right:24px;font-size:60px;opacity:0.12;pointer-events:none;animation:awardsFloat 6s ease-in-out 1s infinite;">🏆</div>
-    <div style="position:absolute;top:50px;left:18px;font-size:32px;opacity:0.08;pointer-events:none;animation:awardsFloat 7s ease-in-out 2s infinite;">⭐</div>
-    <div style="position:absolute;top:50px;right:18px;font-size:32px;opacity:0.08;pointer-events:none;animation:awardsFloat 5s ease-in-out 0.5s infinite;">⭐</div>`;
-  if (!document.getElementById('kf-awards')) {
-    const s = document.createElement('style'); s.id = 'kf-awards';
-    s.textContent = `@keyframes awardsJPulse{0%,100%{opacity:0.13}50%{opacity:0.20}}
-    @keyframes awardsFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-    @keyframes awardsStar{0%{opacity:1;transform:scale(1) rotate(0deg)}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(0) rotate(180deg)}}
-    @keyframes awardsRain{0%{opacity:0.9;transform:translateY(-40px) rotate(0deg)}100%{opacity:0;transform:translateY(105vh) rotate(360deg)}}`;
-    document.head.appendChild(s);
-  }
-  if (decoActiva) iniciarChispasAwards();
-  if (fallingGlovesActivos) iniciarLluviaAwards();
-}
-
-function iniciarChispasAwards() {
-  function lanzarEstrella() {
-    if (!decoActiva) return;
-    const wrap = document.getElementById('awards-particles'); if(!wrap) return;
-    const el = document.createElement('div');
-    const sx = (Math.random()-0.5)*120, sy = (Math.random()-0.5)*120;
-    const sz = 4+Math.random()*7;
-    el.style.cssText = `position:absolute;left:${10+Math.random()*80}%;top:${10+Math.random()*80}%;width:${sz}px;height:${sz}px;border-radius:50%;background:#c9a227;box-shadow:0 0 8px #e8c84a,0 0 18px rgba(201,162,39,0.5);animation:awardsStar 1s ease-out forwards;--sx:${sx}px;--sy:${sy}px;pointer-events:none;`;
-    wrap.appendChild(el);
-    setTimeout(()=>el.remove(), 1100);
-    setTimeout(lanzarEstrella, 1400+Math.random()*2800);
-  }
-  lanzarEstrella(); setTimeout(lanzarEstrella,600); setTimeout(lanzarEstrella,1200); setTimeout(lanzarEstrella,1800);
-}
-
-function iniciarLluviaAwards() {
-  const emojis = ['✨','⭐','🌟','💛'];
-  function lanzar() {
-    if (!fallingGlovesActivos) return;
-    const wrap = document.getElementById('awards-particles'); if(!wrap) return;
-    const el = document.createElement('div');
-    const sz = 14 + Math.random() * 18;
-    const dur = 5 + Math.random() * 6;
-    el.style.cssText = `position:absolute;top:-50px;left:${Math.random()*100}%;font-size:${sz}px;animation:awardsRain ${dur}s linear forwards;pointer-events:none;opacity:0.6;`;
-    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    wrap.appendChild(el);
-    setTimeout(()=>el.remove(), dur*1000+200);
-    setTimeout(lanzar, 500+Math.random()*1000);
-  }
-  lanzar(); setTimeout(lanzar,700); setTimeout(lanzar,1400);
-}
-
-function reiniciarDecoAwards() {
-  const wrap = document.getElementById('awards-particles');
-  if (!wrap) return;
-  wrap.innerHTML = '';
-  if (decoActiva) iniciarChispasAwards();
-  if (fallingGlovesActivos) iniciarLluviaAwards();
 }
 
 // ══════════════════════════════════════════
@@ -4101,48 +3988,6 @@ function cerrarPublicidadOverlay(manual) {
 // ══════════════════════════════════════════
 //  GESTIÓN DE PINES
 // ══════════════════════════════════════════
-async function cargarPines() {
-  const el = document.getElementById('pines-list');
-  if (!el) return;
-  const roles = [
-    {key:'pin_manager', label:'Manager'},
-    {key:'pin_tarjetas', label:'Tarjetas'},
-  {key:'pin_cajaabajo', label:'Caja Abajo'},
-    {key:'pin_cajaextendido', label:'Caja Extendido'},
-    {key:'pin_cajavip', label:'Caja VIP'},
-  ];
-  el.innerHTML = roles.map(r => `<div style="display:flex;align-items:center;gap:10px;">
-    <span style="min-width:130px;font-size:12px;color:#888;letter-spacing:1px;">${r.label}</span>
-    <input type="password" id="pin-${r.key}" class="custom-text-input" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="•••• (4 dígitos)" style="flex:1;max-width:180px;" />
-  </div>`).join('');
-}
-
-async function guardarPines() {
-  const roles = ['pin_manager','pin_cajaabajo','pin_cajaextendido','pin_cajavip'];
-  const updates = {};
-  for (const key of roles) {
-    const val = document.getElementById('pin-'+key)?.value?.trim();
-    if (val) {
-      if (!/^\d{4}$/.test(val)) {
-        showToast('Todos los PINs deben tener 4 dígitos numéricos', true);
-        return;
-      }
-      updates[key] = val;
-    }
-  }
-  if (!Object.keys(updates).length) { showToast('Ingresá al menos un PIN para cambiar', true); return; }
-  try {
-    const r = await fetch('/api/config/pines', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(updates)});
-    const d = await r.json();
-    if (d.ok) {
-      const msg = document.getElementById('pwd-msg');
-      if (msg) { msg.style.color='#2ecc71'; msg.textContent='PINs actualizados correctamente'; setTimeout(()=>msg.textContent='', 3000); }
-      roles.forEach(k => { const inp = document.getElementById('pin-'+k); if(inp) inp.value=''; });
-      showToast('PINs guardados');
-    } else { showToast(d.error||'Error', true); }
-  } catch(e) { showToast('Error de conexión', true); }
-}
-
 // PINs tab (dedicated tab)
 const PIN_ROLES = [
   {key:'pin_manager', label:'Manager'},
@@ -4283,7 +4128,6 @@ setInterval(pollPublicidad, 5000);
 renderMenuMgr();
 cargarCartelPrecios();
 cargarEstadoPub();
-cargarPines();
 setInterval(cargarEstadoPub, 10000);
 </script>
 </body>
@@ -4527,13 +4371,7 @@ body.tema-jagger12 .pres-line{background:linear-gradient(to right,transparent,#c
 body.tema-jagger12 .live-dot{background:#c9a227;}
 body.tema-jagger12 .col-nombre{color:#fff !important;}
 body.tema-jagger12 .col-mesa{color:#ddd !important;}
-body.tema-jaggerawards .rank-row{border-color:#2a0000;}
-body.tema-jaggerawards .rank-row.rank-1{background:#1a0000;border-color:#880000;}
-body.tema-jaggerawards .pres-line{background:linear-gradient(to right,transparent,#ff2222,transparent);}
-body.tema-jaggerawards .live-dot{background:#ff2222;}
-body.tema-jaggerawards .live-badge{border-color:#3a0000;color:#aa3333;}
-body.tema-jaggerawards .col-nombre{color:#fff0f0 !important;}
-body.tema-jaggerawards .col-mesa{color:#ffaaaa !important;}
+
 body.tema-touchofpink .rank-header{background:#2d0022;border-color:#6a2050;}
 body.tema-touchofpink .rank-header span{color:#f472b6;}
 body.tema-touchofpink .rank-row{border-color:#8a3070;background:#3d002c;}
@@ -4624,9 +4462,7 @@ body.modo-presentacion .btn-exit-pres{display:block;}
       <button onclick="aplicarTema('jagger12')" style="background:#000;border:2px solid #333;border-radius:10px;padding:16px 10px;cursor:pointer;text-align:center;color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:1px;font-size:13px;transition:all .2s;" onmouseover="this.style.borderColor='#888'" onmouseout="this.style.borderColor='#333'">
         <div style="font-size:28px;margin-bottom:6px;">🥂</div>JAGGER 12 AÑOS
       </button>
-      <button onclick="aplicarTema('jaggerawards')" style="background:linear-gradient(135deg,#0a0800,#1a1400);border:2px solid #c9a227;border-radius:10px;padding:16px 10px;cursor:pointer;text-align:center;color:#c9a227;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:1px;font-size:13px;transition:all .2s;" onmouseover="this.style.borderColor='#e8c84a'" onmouseout="this.style.borderColor='#c9a227'">
-        <div style="font-size:28px;margin-bottom:6px;">🏆</div>JAGGER AWARDS
-      </button>
+
       <button onclick="aplicarTema('touchofpink')" style="background:linear-gradient(135deg,#140010,#2a0020);border:2px solid #9d174d;border-radius:10px;padding:16px 10px;cursor:pointer;text-align:center;color:#f472b6;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:1px;font-size:13px;transition:all .2s;" onmouseover="this.style.borderColor='#f472b6'" onmouseout="this.style.borderColor='#9d174d'">
         <div style="font-size:28px;margin-bottom:6px;">🌸</div>TURNS PINK
       </button>
@@ -4644,7 +4480,7 @@ body.modo-presentacion .btn-exit-pres{display:block;}
       </div>
       <div id="falling-gloves-toggle" style="display:none;">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:13px;color:#888;letter-spacing:1px;">
-          <input type="checkbox" id="toggle-falling-gloves" onchange="fallingGlovesActivos=this.checked;if(!this.checked){const w=document.getElementById('awards-particles');if(w){[...w.children].filter(el=>el.textContent==='🥊').forEach(g=>g.remove());}}else{iniciarLluviaAwards();}fetch('/api/design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({falling_gloves:this.checked})}).catch(()=>{});" style="width:16px;height:16px;accent-color:#ff2222;" checked />
+          <input type="checkbox" id="toggle-falling-gloves" onchange="fallingGlovesActivos=this.checked;fetch('/api/design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({falling_gloves:this.checked})}).catch(()=>{});" style="width:16px;height:16px;accent-color:#ff2222;" checked />
           <span>🥊 Guantes cayendo</span>
         </label>
       </div>
@@ -4807,7 +4643,7 @@ COLOR_DEFS.forEach(c => customColors[c.key] = c.default);
 
 const TEMAS_EXTRA = {
   jagger12: {colors:{'--black':'#000000','--surface':'#0a0a0a','--border':'#333333','--gold':'#ffffff','--gold-light':'#dddddd','--gold-dim':'#888888','--text':'#e8e8e8','--text-dim':'#666666','--white':'#ffffff'},bodyClass:'tema-jagger12'},
-  jaggerawards: {colors:{'--black':'#050000','--surface':'#0d0000','--border':'#3a0000','--gold':'#ff2222','--gold-light':'#ff5555','--gold-dim':'#880000','--text':'#f0d0d0','--text-dim':'#6a3333','--white':'#fff0f0'},bodyClass:'tema-jaggerawards'},
+
   touchofpink: {colors:{'--black':'#2d0020','--surface':'#480035','--border':'#8a3070','--gold':'#f472b6','--gold-light':'#fbb6ce','--gold-dim':'#e896cc','--text':'#ffe8f5','--text-dim':'#ddaacc','--white':'#ffffff'},bodyClass:'tema-touchofpink'}
 };
 
@@ -4901,7 +4737,7 @@ function mostrarGanador() {
   const wmsg = (document.getElementById('ct-winner-msg').value||'¡EL GANADOR DE LA NOCHE!').toUpperCase();
   const wsub = document.getElementById('ct-winner-sub').value||'';
   const premio = document.getElementById('msg-input').value.trim();
-  const coronaEl = document.getElementById('winner-corona'); if (coronaEl) coronaEl.textContent = temaActual==='jaggerawards' ? '🏆✦🏆' : '👑';
+  const coronaEl = document.getElementById('winner-corona'); if (coronaEl) coronaEl.textContent = '👑';
   const _wt=document.getElementById('winner-titulo'); if(_wt) _wt.textContent = wmsg;
   document.getElementById('winner-mesa').textContent = mesas[ganador]||'—';
   document.getElementById('winner-nombre').textContent = ganador.toUpperCase();
@@ -4970,7 +4806,7 @@ setInterval(loadData, 2000); loadData();
 
 function aplicarTema(nombre) {
   const temaExtra = TEMAS_EXTRA[nombre];
-  document.body.classList.remove('tema-jagger12','tema-jaggerawards','tema-touchofpink','pink-claro');
+  document.body.classList.remove('tema-jagger12','tema-touchofpink','pink-claro');
   pinkModoClaro = false;
   const overlay = document.getElementById('tema-overlay');
   overlay.innerHTML = ''; overlay.style.opacity = '0';
@@ -4980,22 +4816,22 @@ function aplicarTema(nombre) {
     document.documentElement.style.setProperty('--surface-gold', blendSurfaceGold(temaExtra.colors['--surface']||'#111'));
     document.body.classList.add(temaExtra.bodyClass);
     temaActual = nombre;
-    const fallingToggle = document.getElementById('falling-gloves-toggle'); if(fallingToggle) fallingToggle.style.display = nombre==='jaggerawards'?'block':'none';
-    const koToggle = document.getElementById('ko-anim-toggle'); if(koToggle) koToggle.style.display = nombre==='jaggerawards'?'block':'none';
-    const show12Toggle = document.getElementById('show-12-toggle'); if(show12Toggle) show12Toggle.style.display = (nombre==='jagger12'||nombre==='jaggerawards')?'block':'none';
+    const fallingToggle = document.getElementById('falling-gloves-toggle'); if(fallingToggle) fallingToggle.style.display = 'none';
+    const koToggle = document.getElementById('ko-anim-toggle'); if(koToggle) koToggle.style.display = 'none';
+    const show12Toggle = document.getElementById('show-12-toggle'); if(show12Toggle) show12Toggle.style.display = nombre==='jagger12'?'block':'none';
     const pinkPetTog = document.getElementById('pink-petalos-toggle'); if(pinkPetTog) pinkPetTog.style.display = nombre==='touchofpink'?'block':'none';
     const pinkModoTog = document.getElementById('pink-modo-toggle'); if(pinkModoTog) pinkModoTog.style.display = nombre==='touchofpink'?'flex':'none';
     const savedVip = (()=>{try{return localStorage.getItem('rankingVIP_vip')||'VIP';}catch(e){return 'VIP';}})();
     const mainLogo = document.getElementById('main-logo'); if(mainLogo) mainLogo.innerHTML = `RANKING <span class="vip" id="logo-vip">${savedVip}</span>`;
     if (tl) {
-      if (nombre==='jaggerawards') tl.innerHTML=`<div style="text-align:center;"><div style="font-family:'Oswald',sans-serif;font-size:clamp(16px,2.5vw,28px);font-weight:700;letter-spacing:6px;color:#c9a227;text-shadow:0 0 20px rgba(201,162,39,1),0 0 40px rgba(201,162,39,0.6);">JAGGER AWARDS</div><div style="font-family:'Oswald',sans-serif;font-size:clamp(11px,1.6vw,17px);font-weight:600;letter-spacing:4px;color:#e8c84a;opacity:0.8;margin-top:3px;">LA NOCHE DE LOS PREMIOS</div></div>`;
+
       else if (nombre==='touchofpink') tl.innerHTML=`<div style="text-align:center;"><div style="font-family:'Oswald',sans-serif;font-size:clamp(18px,2.8vw,30px);font-weight:700;letter-spacing:6px;color:#fff;text-shadow:0 0 12px rgba(255,255,255,0.9);">JAGGER CLUB</div><div style="font-family:'Oswald',sans-serif;font-size:clamp(13px,2vw,22px);font-weight:600;letter-spacing:5px;color:#f472b6;margin-top:3px;text-shadow:0 0 10px rgba(244,114,182,1);">TURNS PINK</div></div>`;
       else tl.innerHTML=`<div style="text-align:center;"><div style="font-family:'Oswald',sans-serif;font-size:clamp(14px,2.2vw,24px);font-weight:700;letter-spacing:4px;color:#e8c84a;text-shadow:0 0 14px rgba(232,200,74,0.9);">JAGGER CLUB · 12 AÑOS</div><div style="font-family:'Oswald',sans-serif;font-size:clamp(11px,1.6vw,17px);font-weight:600;letter-spacing:3px;color:#e8c84a;opacity:0.75;margin-top:2px;">12 AÑOS DE HISTORIA NO SON PARA CUALQUIERA</div></div>`;
     }
     const toggleWrap = document.getElementById('tema-deco-toggle');
     if (toggleWrap) {
       toggleWrap.style.display = 'flex';
-      const decoLabel = nombre==='jagger12'?'Activar burbujas de champagne':nombre==='jaggerawards'?'Activar chispas y efectos del ring':'Activar decoraciones animadas';
+      const decoLabel = nombre==='jagger12'?'Activar burbujas de champagne':'Activar decoraciones animadas';
       document.getElementById('toggle-deco-label').textContent = decoLabel;
       document.getElementById('toggle-deco').checked = decoActiva;
       const dl = document.getElementById('deco-main-label'); if(dl) dl.style.display = nombre==='touchofpink'?'none':'';
@@ -5024,9 +4860,7 @@ function aplicarTema(nombre) {
 function toggleDecoActual(checked) {
   decoActiva = checked;
   fetch('/api/design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deco_activa:checked})}).catch(()=>{});
-  if (temaActual === 'jaggerawards') {
-    const wrap = document.getElementById('awards-particles');
-    if (!checked) { if(wrap) wrap.innerHTML=''; } else { iniciarChispasAwards(); if(fallingGlovesActivos) iniciarLluviaAwards(); }
+  if (false) {
   } else if (temaActual === 'jagger12') {
     const wrap = document.getElementById('jagger12-particles');
     if (!checked) { if(wrap) wrap.innerHTML=''; } else if(wrap) {
@@ -5039,13 +4873,13 @@ function toggleDecoActual(checked) {
 
 function reiniciarDeco12() {
   if (temaActual==='jagger12') iniciarJagger12Deco();
-  else if (temaActual==='jaggerawards') { /* J awards overlay is static, managed by iniciarJaggerAwardsDeco */ }
+
 }
 
 function iniciarDecoTema(nombre) {
   const overlay = document.getElementById('tema-overlay'); overlay.style.opacity='1';
   if (nombre==='jagger12') { overlay.innerHTML=''; iniciarJagger12Deco(); }
-  if (nombre==='jaggerawards') iniciarJaggerAwardsDeco();
+
   if (nombre==='touchofpink') {
     overlay.innerHTML=`<div style="position:absolute;top:12%;left:8%;font-size:14px;color:rgba(255,255,255,0.45);pointer-events:none;animation:goldTwinkle 3s ease-in-out infinite;">✦</div><div style="position:absolute;top:18%;right:10%;font-size:11px;color:rgba(255,255,255,0.38);pointer-events:none;animation:goldTwinkle 4s ease-in-out 1s infinite;">✦</div><div style="position:absolute;top:50%;left:5%;font-size:12px;color:rgba(255,255,255,0.35);pointer-events:none;animation:goldTwinkle 5s ease-in-out 2s infinite;">✦</div><div style="position:absolute;top:65%;right:6%;font-size:15px;color:rgba(255,255,255,0.4);pointer-events:none;animation:goldTwinkle 3.5s ease-in-out .5s infinite;">✦</div><div style="position:absolute;top:33%;left:14%;font-size:9px;color:rgba(251,182,206,0.55);pointer-events:none;animation:goldTwinkle 4.5s ease-in-out 1.5s infinite;">✦</div><div style="position:absolute;top:42%;right:16%;font-size:10px;color:rgba(251,182,206,0.5);pointer-events:none;animation:goldTwinkle 3.8s ease-in-out .8s infinite;">✦</div><div id="petalos-wrap" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div>`;
     if (pinkPetalosActivos) iniciarPetalos();
@@ -5062,25 +4896,6 @@ function iniciarJagger12Deco() {
   }
 }
 
-function iniciarJaggerAwardsDeco() {
-  const overlay = document.getElementById('tema-overlay');
-  overlay.innerHTML=`<div id="awards-particles" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div><svg id="svg-j-awards" width="100%" height="100%" viewBox="0 0 1000 700" style="position:absolute;inset:0;pointer-events:none;opacity:0.13;animation:awardsJPulse 4s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><text x="500" y="520" text-anchor="middle" dominant-baseline="auto" font-family="Georgia,serif" font-weight="900" font-size="700" fill="#c9a227" letter-spacing="-20">J</text></svg><svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.06;" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="12%" x2="100%" y2="12%" stroke="#c9a227" stroke-width="1"/><line x1="0" y1="88%" x2="100%" y2="88%" stroke="#c9a227" stroke-width="1"/></svg><div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);font-family:'Oswald',sans-serif;font-size:12px;color:#c9a227;opacity:0.18;letter-spacing:10px;text-transform:uppercase;white-space:nowrap;pointer-events:none;">✦ JAGGER AWARDS ✦</div><div style="position:absolute;bottom:10px;left:24px;font-size:60px;opacity:0.12;pointer-events:none;animation:awardsFloat 5s ease-in-out infinite;">🏆</div><div style="position:absolute;bottom:10px;right:24px;font-size:60px;opacity:0.12;pointer-events:none;animation:awardsFloat 6s ease-in-out 1s infinite;">🏆</div>`;
-  if (!document.getElementById('kf-awards-p')) {
-    const s=document.createElement('style');s.id='kf-awards-p';
-    s.textContent=`@keyframes awardsJPulse{0%,100%{opacity:0.13}50%{opacity:0.20}}@keyframes awardsFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}@keyframes awardsStar{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(0)}}@keyframes awardsRain{0%{opacity:0.9;transform:translateY(-40px)}100%{opacity:0;transform:translateY(105vh)}}`;
-    document.head.appendChild(s);
-  }
-  if (decoActiva) iniciarChispasAwards();
-  if (fallingGlovesActivos) iniciarLluviaAwards();
-}
-
-function iniciarChispasAwards() {
-  function lanzarChispa() { if(!decoActiva) return; const wrap=document.getElementById('awards-particles'); if(!wrap) return; const el=document.createElement('div'); const bx=(Math.random()-.5)*100,by=(Math.random()-.5)*100,sz=3+Math.random()*6; el.style.cssText=`position:absolute;left:${10+Math.random()*80}%;top:${10+Math.random()*80}%;width:${sz}px;height:${sz}px;border-radius:50%;background:#c9a227;box-shadow:0 0 8px #e8c84a,0 0 18px rgba(201,162,39,0.5);animation:awardsStar 1s ease-out forwards;--sx:${bx}px;--sy:${by}px;pointer-events:none;`; wrap.appendChild(el); setTimeout(()=>el.remove(),900); setTimeout(lanzarChispa,1200+Math.random()*2500); }
-  lanzarChispa(); setTimeout(lanzarChispa,500); setTimeout(lanzarChispa,1000); setTimeout(lanzarChispa,1500);
-}
-
-function iniciarLluviaAwards() {
-  function lanzarGuante() { if(!fallingGlovesActivos) return; const wrap=document.getElementById('awards-particles'); if(!wrap) return; const el=document.createElement('div'); const sz=18+Math.random()*22,dur=5+Math.random()*6; const emojisP=['✨','⭐','🌟','💛']; el.style.cssText=`position:absolute;top:-50px;left:${Math.random()*100}%;font-size:${sz}px;animation:awardsRain ${dur}s linear forwards;pointer-events:none;opacity:0.6;`; el.textContent=emojisP[Math.floor(Math.random()*emojisP.length)]; wrap.appendChild(el); setTimeout(()=>el.remove(),dur*1000+200); setTimeout(lanzarGuante,600+Math.random()*1200); }
   lanzarGuante(); setTimeout(lanzarGuante,800); setTimeout(lanzarGuante,1600);
 }
 
@@ -5407,14 +5222,7 @@ body.tema-jagger12 .pres-line{background:linear-gradient(to right,transparent,#c
 body.tema-jagger12 .live-dot{background:#c9a227;}
 body.tema-jagger12 .col-nombre{color:#fff !important;}
 body.tema-jagger12 .col-mesa{color:#ddd !important;}
-/* ══ TEMA JAGGER AWARDS ══ */
-body.tema-jaggerawards .rank-row{border-color:#2a1c00;}
-body.tema-jaggerawards .rank-row.rank-1{background:#1a1200;border-color:#c9a227;}
-body.tema-jaggerawards .pres-line{background:linear-gradient(to right,transparent,#c9a227,transparent);}
-body.tema-jaggerawards .live-dot{background:#c9a227;}
-body.tema-jaggerawards .live-badge{border-color:#3a2a00;color:#c9a227;}
-body.tema-jaggerawards .col-nombre{color:#ffffff !important;}
-body.tema-jaggerawards .col-mesa{color:#e8c84a !important;}
+
 /* ══ TEMA A TOUCH OF PINK ══ */
 body.tema-touchofpink .rank-header{background:#2d0022;border-color:#6a2050;}
 body.tema-touchofpink .rank-header span{color:#f472b6;text-shadow:0 0 8px rgba(244,114,182,0.4);}
@@ -5689,7 +5497,7 @@ async function loadData() {
       const rays = document.getElementById('cartel-rays');
       if (rays) {
         rays.innerHTML = '';
-        const rayColor = temaActual==='jaggerawards'?'rgba(255,34,34,0.12)':temaActual==='touchofpink'?'rgba(244,114,182,0.12)':'rgba(201,162,39,0.12)';
+        const rayColor = temaActual==='touchofpink'?'rgba(244,114,182,0.12)':'rgba(201,162,39,0.12)';
         for (let i=0;i<12;i++) {
           const r=document.createElement('div');
           r.style.cssText=`position:absolute;left:50%;top:50%;width:1px;height:55vh;background:linear-gradient(to bottom,${rayColor},transparent);transform-origin:0% 0%;transform:rotate(${i*30}deg);opacity:0.5;animation:rayPulse2 ${2+i*0.15}s ease-in-out ${i*0.1}s infinite alternate;`;
@@ -5700,8 +5508,7 @@ async function loadData() {
       // Fondo según tema
       const bg=document.getElementById('cartel-tema-bg');
       if(bg){
-        bg.innerHTML=temaActual==='jaggerawards'?
-          `<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#1a0000 0%,#050000 100%);"></div><div style="position:absolute;bottom:0;left:0;font-size:160px;opacity:0.06;transform:rotate(-15deg);">🥊</div><div style="position:absolute;bottom:0;right:0;font-size:160px;opacity:0.06;transform:rotate(15deg) scaleX(-1);">🥊</div>`:
+        bg.innerHTML=''left:0;font-size:160px;opacity:0.06;transform:rotate(-15deg);">🥊</div><div style="position:absolute;bottom:0;right:0;font-size:160px;opacity:0.06;transform:rotate(15deg) scaleX(-1);">🥊</div>`:
           temaActual==='jagger12'?
           `<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#111 0%,#000 100%);"></div><div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,162,39,0.05) 0%,transparent 70%);"></div>`:
           temaActual==='touchofpink'?
@@ -5784,7 +5591,7 @@ async function loadDesign() {
 
     // ── Tema (body class + decoraciones) ──
     if (d.tema !== undefined) {
-      document.body.classList.remove('tema-fullblack','tema-navidad','tema-anonuevo','tema-halloween','tema-touchofpink','pink-claro','tema-jagger12','tema-jaggerawards');
+      document.body.classList.remove('tema-fullblack','tema-navidad','tema-anonuevo','tema-halloween','tema-touchofpink','pink-claro','tema-jagger12');
       if (d.tema && d.tema !== 'default') document.body.classList.add('tema-'+d.tema);
       temaActual = d.tema || 'default';
       const decoChanged = (
@@ -5838,7 +5645,7 @@ function iniciarDecoTemaPantalla(nombre) {
   overlay.style.opacity = '1';
   if (!decoActivaPantalla) { overlay.innerHTML = ''; overlay.style.opacity = '0'; return; }
   if (nombre === 'jagger12') iniciarJagger12DecoPantalla();
-  if (nombre === 'jaggerawards') iniciarJaggerAwardsDeco();
+
   if (nombre === 'touchofpink') iniciarTouchOfPinkDecoPantalla();
 }
 
@@ -5869,56 +5676,6 @@ function iniciarJagger12DecoPantalla() {
     setTimeout(lanzarBurbuja,200+Math.random()*600);
   }
   for(let i=0;i<8;i++) setTimeout(lanzarBurbuja,i*120);
-}
-
-function iniciarJaggerAwardsDeco() {
-  const overlay = document.getElementById('tema-overlay');
-  if (!overlay) return;
-  overlay.innerHTML = `
-    <div id="pbox-particles" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div>
-    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.07;" xmlns="http://www.w3.org/2000/svg">
-      <line x1="0" y1="28%" x2="100%" y2="28%" stroke="#ff2222" stroke-width="3"/>
-      <line x1="0" y1="48%" x2="100%" y2="48%" stroke="#cc0000" stroke-width="2"/>
-      <line x1="0" y1="68%" x2="100%" y2="68%" stroke="#ff2222" stroke-width="3"/>
-      <line x1="2%" y1="20%" x2="2%" y2="76%" stroke="#888" stroke-width="4"/>
-      <line x1="98%" y1="20%" x2="98%" y2="76%" stroke="#888" stroke-width="4"/>
-    </svg>
-    <svg width="100%" height="100%" viewBox="0 0 1000 600" style="position:absolute;inset:0;pointer-events:none;opacity:0.035;" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-      <text x="500" y="380" text-anchor="middle" dominant-baseline="middle" font-family="Oswald,Arial" font-weight="700" font-size="560" fill="#ff0000" letter-spacing="-10">12</text>
-    </svg>
-    <div style="position:absolute;bottom:0;left:0;font-size:130px;opacity:0.15;transform:rotate(-20deg) translateY(20px);pointer-events:none;">🥊</div>
-    <div style="position:absolute;bottom:0;right:0;font-size:130px;opacity:0.15;transform:rotate(20deg) translateY(20px) scaleX(-1);pointer-events:none;">🥊</div>
-    <div style="position:absolute;top:60px;left:20px;font-size:55px;opacity:0.1;transform:rotate(15deg);pointer-events:none;">🥊</div>
-    <div style="position:absolute;top:60px;right:20px;font-size:55px;opacity:0.1;transform:rotate(-15deg) scaleX(-1);pointer-events:none;">🥊</div>
-    <div style="position:absolute;top:40%;left:5%;font-size:70px;opacity:0.06;transform:rotate(-10deg);pointer-events:none;animation:guanteFloatP 6s ease-in-out infinite;">🥊</div>
-    <div style="position:absolute;top:35%;right:5%;font-size:70px;opacity:0.06;transform:rotate(10deg) scaleX(-1);pointer-events:none;animation:guanteFloatP 7s ease-in-out 1s infinite;">🥊</div>`;
-  // Chispas (solo si deco activa)
-  if (decoActivaPantalla) {
-    function lanzarChispa() {
-      const wrap=document.getElementById('pbox-particles'); if(!wrap) return;
-      const el=document.createElement('div');
-      const bx=(Math.random()-0.5)*100,by=(Math.random()-0.5)*100,sz=3+Math.random()*6;
-      el.style.cssText=`position:absolute;left:${20+Math.random()*60}%;top:${20+Math.random()*60}%;width:${sz}px;height:${sz}px;border-radius:50%;background:#ff3333;box-shadow:0 0 8px #ff0000,0 0 16px rgba(255,0,0,0.4);animation:sparkBoxP 0.8s ease-out forwards;--bx:${bx}px;--by:${by}px;pointer-events:none;`;
-      wrap.appendChild(el);
-      setTimeout(()=>el.remove(),900);
-      setTimeout(lanzarChispa,150+Math.random()*350);
-    }
-    lanzarChispa(); setTimeout(lanzarChispa,400); setTimeout(lanzarChispa,800);
-  }
-  // Lluvia de guantes (solo si gloves activos)
-  if (glovesActivosPantalla) {
-    function lanzarGuante() {
-      const wrap=document.getElementById('pbox-particles'); if(!wrap) return;
-      const el=document.createElement('div');
-      const sz=18+Math.random()*22,dur=5+Math.random()*6;
-      el.style.cssText=`position:absolute;top:-50px;left:${Math.random()*100}%;font-size:${sz}px;animation:guanteFallP ${dur}s linear forwards;pointer-events:none;opacity:0.55;`;
-      el.textContent='🥊';
-      wrap.appendChild(el);
-      setTimeout(()=>el.remove(),dur*1000+200);
-      setTimeout(lanzarGuante,600+Math.random()*1200);
-    }
-    lanzarGuante(); setTimeout(lanzarGuante,800); setTimeout(lanzarGuante,1600);
-  }
 }
 
 function iniciarTouchOfPinkDecoPantalla() {
@@ -7061,12 +6818,25 @@ function limpiarPedido(side) {
   if (side==='tarjeta') {
     orderT={}; variosT=[]; searchTermT='';
     const s=document.getElementById('search-tarjeta'); if(s) s.value='';
+    // Ocultar confirm-bar y limpiar barra inferior
+    const cb = document.getElementById('confirm-bar-tarjeta');
+    if (cb) cb.classList.remove('show');
+    const op = document.getElementById('order-panel-tarjeta');
+    if (op) op.classList.remove('show');
+    const cbTotal = document.getElementById('cb-total-tarjeta');
+    if (cbTotal) cbTotal.textContent = '$0';
+    renderTarjeta();
   } else {
     orderM={}; variosM=[]; searchTermM='';
     const s=document.getElementById('search-manual'); if(s) s.value='';
+    const cb = document.getElementById('confirm-bar-manual');
+    if (cb) cb.classList.remove('show');
+    const op = document.getElementById('order-panel-manual');
+    if (op) op.classList.remove('show');
+    const cbTotal = document.getElementById('cb-total-manual');
+    if (cbTotal) cbTotal.textContent = '$0';
   }
   renderMenuProds(side);
-  renderOrder(side);
 }
 
 function buildItems(side) {
@@ -7106,7 +6876,7 @@ async function confirmarTarjeta() {
   if (!items.length) { showToast('El pedido está vacío', true); return; }
   const total = calcTotal('tarjeta');
   if (total > ta.saldo_actual) { showToast('Saldo insuficiente. Disponible: '+fmt(ta.saldo_actual), true); return; }
-  const name = document.getElementById('name-tarjeta').value.trim() || ta.nombre || 'Cliente';
+  const name = ta.nombre || 'Cliente';
   try {
     const res = await fetch('/api/tx',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
       name, amount:total, caja:CAJA, mesa:ta.mesa, tarjeta_codigo:ta.codigo, client_time:now(), items
