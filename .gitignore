@@ -1,0 +1,39 @@
+# Datos sensibles y persistentes (NO subir a GitHub)
+data.json
+historial.json
+config.json
+gsheets_creds.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Entornos virtuales
+venv/
+env/
+.env/
+.venv/
+
+# Variables de entorno
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
