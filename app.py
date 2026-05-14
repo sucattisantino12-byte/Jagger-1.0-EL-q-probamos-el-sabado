@@ -8552,7 +8552,7 @@ def api_login():
     role = str(body.get('role', ''))
     pin = str(body.get('pin', ''))
     cfg = load_config()
-    valid_roles = ['manager', 'cajaabajo', 'cajaextendido', 'cajavip']
+    valid_roles = ['manager', 'cajaabajo', 'cajaextendido', 'cajavip', 'tarjetas']
     if role not in valid_roles:
         return jsonify({'ok': False, 'error': 'Rol inválido'}), 400
     cfg_key = 'pin_' + role
