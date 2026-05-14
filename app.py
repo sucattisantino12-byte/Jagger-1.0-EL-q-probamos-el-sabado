@@ -5508,7 +5508,7 @@ async function loadData() {
       // Fondo según tema
       const bg=document.getElementById('cartel-tema-bg');
       if(bg){
-        bg.innerHTML=''left:0;font-size:160px;opacity:0.06;transform:rotate(-15deg);">🥊</div><div style="position:absolute;bottom:0;right:0;font-size:160px;opacity:0.06;transform:rotate(15deg) scaleX(-1);">🥊</div>`:
+        bg.innerHTML=
           temaActual==='jagger12'?
           `<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#111 0%,#000 100%);"></div><div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,162,39,0.05) 0%,transparent 70%);"></div>`:
           temaActual==='touchofpink'?
