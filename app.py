@@ -45,6 +45,7 @@ def save_config(cfg):
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'jagger_vip_secret_k9x_2024')
 app.permanent_session_lifetime = timedelta(hours=12)
+app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB max upload
 lock = threading.Lock()
 
 _db = {'transactions': [], 'tx_id_counter': 0, 'tarjetas': {}, 'tarjetas_conf': [], 'menu': [], 'menu_id_counter': 0}
@@ -882,12 +883,12 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
       <div style="font-family:'Oswald',sans-serif;font-size:13px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">URL de video MP4</div>
       <label class="field-label">URL directa del video (.mp4)</label>
       <input id="pub-url" class="field-input" type="text" placeholder="https://ejemplo.com/video.mp4" />
-      <label class="field-label">Cada cuántos minutos aparece en pantalla</label>
-      <input id="pub-frec" class="field-input" type="number" min="1" max="120" value="15" />
-      <div class="btn-row" style="margin-top:4px;gap:10px;">
-        <button onclick="activarPublicidad()" class="btn-add">▶ Activar programa</button>
-        <button onclick="mostrarAhora()" style="background:#1a3a1a;color:#3a9a5a;border:1px solid #2a5a2a;border-radius:7px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;" onmouseover="this.style.background='#223a22'" onmouseout="this.style.background='#1a3a1a'">📺 Mostrar ahora en pantalla</button>
-        <button onclick="desactivarPublicidad()" style="background:transparent;color:#555;border:1px solid #222;border-radius:7px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='#c9a227';this.style.color='#c9a227'" onmouseout="this.style.borderColor='#222';this.style.color='#555'">■ Desactivar</button>
+      <label class="field-label">Cada cuántos minutos aparece</label>
+      <input id="pub-frec" class="field-input" type="number" min="1" max="120" value="15" style="margin-bottom:12px;" />
+      <div class="btn-row" style="margin-top:4px;gap:10px;flex-wrap:wrap;">
+        <button onclick="activarPublicidad()" class="btn-add" style="flex:1;">▶ Activar</button>
+        <button onclick="mostrarAhora()" style="background:#1a3a1a;color:#3a9a5a;border:1px solid #2a5a2a;border-radius:7px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;" onmouseover="this.style.background='#223a22'" onmouseout="this.style.background='#1a3a1a'">📺 Mostrar ahora</button>
+        <button onclick="desactivarPublicidad()" style="background:transparent;color:#555;border:1px solid #222;border-radius:7px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='#a83030';this.style.color='#cc4444'" onmouseout="this.style.borderColor='#222';this.style.color='#555'">■ Detener</button>
       </div>
     </div>
     <!-- Subir archivo -->
@@ -901,9 +902,13 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
   </div>
   <div id="pub-estado-box" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
     <span style="font-size:22px;" id="pub-estado-icon">⏸</span>
-    <div>
+    <div style="flex:1;">
       <div style="font-family:'Oswald',sans-serif;font-size:14px;color:var(--text);letter-spacing:1px;">Estado: <span id="pub-estado-txt" style="color:var(--gold);">Inactiva</span></div>
       <div id="pub-estado-url" style="font-size:11px;color:#555;margin-top:3px;"></div>
+    </div>
+    <div id="pub-cronometro-wrap" style="display:none;text-align:right;flex-shrink:0;">
+      <div style="font-size:10px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;">PRÓXIMO VIDEO</div>
+      <div id="pub-cronometro" style="font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:#aaa;letter-spacing:2px;"></div>
     </div>
   </div>
 </div>
@@ -3873,48 +3878,101 @@ async function eliminarProducto(id) {
 // ══════════════════════════════════════════
 let pubPollingMgr = null;
 
+let _pubCronometroInterval = null;
+let _pubInicioTs = 0;
+
 async function cargarEstadoPub() {
   try {
     const r = await fetch('/api/publicidad/estado');
     const d = await r.json();
     const ico = document.getElementById('pub-estado-icon');
     const txt = document.getElementById('pub-estado-txt');
-    const urlEl = document.getElementById('pub-estado-url');
+    const urlBox = document.getElementById('pub-estado-url');
+    const url = d.url || '';
     if (ico) ico.textContent = d.activa ? '▶' : '⏸';
-    if (txt) { txt.textContent = d.activa ? 'Activa' : 'Inactiva'; txt.style.color = d.activa ? '#2ecc71' : 'var(--gold)'; }
-    if (urlEl) urlEl.textContent = d.publicidad_url ? d.publicidad_url.slice(0,60)+(d.publicidad_url.length>60?'…':'') : '';
-    if (document.getElementById('pub-url') && !document.getElementById('pub-url').value && d.publicidad_url) {
-      document.getElementById('pub-url').value = d.publicidad_url;
-    }
-    if (document.getElementById('pub-frec') && d.frecuencia) {
+    if (txt) { txt.textContent = d.activa ? 'Reproduciendo' : 'Inactiva'; txt.style.color = d.activa ? '#2ecc71' : '#888'; }
+    if (urlBox) urlBox.textContent = url ? url.split('/').pop().slice(0,50) : '';
+    // Rellenar campo URL si está vacío
+    const urlInput = document.getElementById('pub-url');
+    if (urlInput && !urlInput.value && url) urlInput.value = url;
+    _pubUrlActual = url || _pubUrlActual;
+    if (d.frecuencia && document.getElementById('pub-frec') && !document.getElementById('pub-frec').matches(':focus')) {
       document.getElementById('pub-frec').value = d.frecuencia;
+    }
+    // Cronómetro: si hay mostrar_ts activo, mostrar tiempo transcurrido
+    const ts = d.mostrar_ts || 0;
+    const serverNow = d.server_time || (Date.now()/1000);
+    if (ts > 0 && d.activa) {
+      if (ts !== _pubInicioTs) {
+        _pubInicioTs = ts;
+        iniciarCronometroMgr(ts, serverNow, d.frecuencia);
+      }
+    } else {
+      detenerCronometroMgr();
     }
   } catch(e) {}
 }
 
+function iniciarCronometroMgr(inicioTs, serverNow, frecMinutos) {
+  clearInterval(_pubCronometroInterval);
+  const crono = document.getElementById('pub-cronometro');
+  if (!crono) return;
+  const wrap2 = document.getElementById('pub-cronometro-wrap');
+  if (wrap2) wrap2.style.display = 'block';
+  const offsetLocal = Date.now()/1000 - serverNow;
+  const frecSeg = (frecMinutos || 15) * 60;
+  function tick() {
+    const elapsed = (Date.now()/1000 - offsetLocal) - inicioTs;
+    const remaining = frecSeg - elapsed;
+    if (remaining <= 0) {
+      crono.textContent = '¡YA!';
+      crono.style.color = '#2ecc71';
+      return;
+    }
+    crono.style.color = remaining < 60 ? '#e8c84a' : '#aaa';
+    const m = Math.floor(remaining/60);
+    const s = Math.floor(remaining%60).toString().padStart(2,'0');
+    crono.textContent = m+':'+s;
+  }
+  tick();
+  _pubCronometroInterval = setInterval(tick, 500);
+}
+
+function detenerCronometroMgr() {
+  clearInterval(_pubCronometroInterval);
+  _pubInicioTs = 0;
+  const wrap = document.getElementById('pub-cronometro-wrap');
+  if (wrap) wrap.style.display = 'none';
+}
+
 async function activarPublicidad() {
-  const url = (document.getElementById('pub-url')?.value||'').trim();
+  const url = (document.getElementById('pub-url')?.value||'').trim() || _pubUrlActual;
   const frec = parseInt(document.getElementById('pub-frec')?.value||15);
   if (!url) { showToast('Ingresá una URL de video', true); return; }
   try {
     await fetch('/api/publicidad/activar', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, frecuencia:frec})});
     await cargarEstadoPub();
-    showToast('Publicidad activada');
+    showToast('✓ Publicidad activada — aparece cada '+frec+' min');
   } catch(e) { showToast('Error', true); }
 }
 
 async function mostrarAhora() {
+  const url = (document.getElementById('pub-url')?.value||'').trim() || _pubUrlActual;
+  if (!url) { showToast('Primero subí o ingresá una URL de video', true); return; }
   try {
+    await fetch('/api/publicidad/activar', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, frecuencia: parseInt(document.getElementById('pub-frec')?.value||15)})});
     await fetch('/api/publicidad/mostrar-ahora', {method:'POST'});
-    showToast('📺 Video enviado a pantalla');
+    await cargarEstadoPub();
+    showToast('📺 Video en pantalla');
   } catch(e) { showToast('Error', true); }
 }
 
 async function desactivarPublicidad() {
   try {
     await fetch('/api/publicidad/desactivar', {method:'POST'});
+    detenerCronometroMgr();
     await cargarEstadoPub();
-    showToast('Publicidad desactivada');
+    showToast('Publicidad detenida');
   } catch(e) { showToast('Error', true); }
 }
 
@@ -3943,6 +4001,7 @@ async function subirVideoPublicidad() {
 // ══════════════════════════════════════════
 let pubLastActiva = false;
 let pubCloseTimer = null;
+let _pubUrlActual = '';
 
 async function pollPublicidad() {
   try {
@@ -4895,8 +4954,6 @@ function iniciarJagger12Deco() {
   }
 }
 
-  lanzarGuante(); setTimeout(lanzarGuante,800); setTimeout(lanzarGuante,1600);
-}
 
 function iniciarPetalos() {
   const wrap=document.getElementById('petalos-wrap'); if(!wrap) return; wrap.innerHTML='';
@@ -5711,71 +5768,91 @@ function applyClockSize(size) {
 setInterval(loadDesign, 2000);
 loadDesign();
 
-// ── Publicidad (frecuencia) ──
+// ── Publicidad sincronizada ──
 let _pubMostrarTsAnterior = 0;
+let _pubSyncInterval = null;
+
 async function checkPublicidad() {
   try {
     const r = await fetch('/api/publicidad/estado');
     const d = await r.json();
-    pubFrecuenciaMs = (parseInt(d.frecuencia)||15) * 60 * 1000;
-    if (!d.url) { pubActiva = false; return; }
-    // Mostrar sincronizado: usar server_time para calcular offset exacto
+    if (!d.url) { cerrarPublicidad(); return; }
+
     const ts = d.mostrar_ts || 0;
+    const serverNow = d.server_time || (Date.now() / 1000);
+
+    // ── Nuevo "mostrar ahora" del manager ──
     if (ts > 0 && ts !== _pubMostrarTsAnterior) {
       _pubMostrarTsAnterior = ts;
-      // Calcular cuántos segundos pasaron desde que el manager apretó el botón
-      const serverNow = d.server_time || (Date.now() / 1000);
+      // Calcular cuántos segundos pasaron desde que el manager apretó
       const offset = Math.max(0, serverNow - ts);
-      mostrarPublicidadSync(d.url, offset);
+      iniciarVideoSincronizado(d.url, offset);
       return;
     }
-    if (!d.activa) { pubActiva = false; return; }
-    pubActiva = true;
-    const now = Date.now();
-    if (now - pubLastShown >= pubFrecuenciaMs) {
-      mostrarPublicidad(d.url);
+
+    // ── Publicidad periódica activa ──
+    if (!d.activa) return;
+    pubFrecuenciaMs = (parseInt(d.frecuencia)||15) * 60 * 1000;
+    if (Date.now() - pubLastShown >= pubFrecuenciaMs) {
+      iniciarVideoSincronizado(d.url, 0);
     }
   } catch(e){}
 }
-setInterval(checkPublicidad, 3000); // poll más frecuente para sincronizar mejor
+setInterval(checkPublicidad, 1000);
 checkPublicidad();
 
-function mostrarPublicidad(url) {
-  mostrarPublicidadSync(url, 0);
-}
-
-function mostrarPublicidadSync(url, offsetSegundos) {
+function iniciarVideoSincronizado(url, offsetSegundos) {
   const overlay = document.getElementById('pub-overlay');
   const video = document.getElementById('pub-video');
-  const iframe = document.getElementById('pub-iframe');
-  if (!overlay) return;
+  if (!overlay || !video) return;
   pubLastShown = Date.now();
-  if (iframe) { iframe.style.display='none'; iframe.src=''; }
-  video.style.display='block';
+
+  // Limpiar timer anterior
+  clearTimeout(window._pubSafetyTimer);
+  clearInterval(_pubSyncInterval);
+
   overlay.classList.add('show');
-  // Si ya tenemos la misma URL cargada y el offset está dentro de la duración, hacer seek
-  if (video.src && video.src.endsWith(url.replace(/^.*\//,'')) && video.readyState >= 2) {
-    if (offsetSegundos > 0 && offsetSegundos < video.duration) {
+  video.style.display = 'block';
+
+  // Cargar video y hacer seek al offset para sincronizar con otras pantallas
+  video.src = url;
+  video.load();
+  video.oncanplay = function() {
+    if (offsetSegundos > 0 && video.duration && offsetSegundos < video.duration) {
       video.currentTime = offsetSegundos;
     }
     video.play().catch(()=>{});
-  } else {
-    video.src = url;
-    video.oncanplay = function() {
-      if (offsetSegundos > 0 && offsetSegundos < video.duration) {
-        video.currentTime = offsetSegundos;
-      }
-      video.play().catch(()=>{});
-      video.oncanplay = null;
-    };
-    video.load();
-  }
-  video.onended = cerrarPublicidad;
-  video.onerror = function() { cerrarPublicidad(); };
-  // Safety timeout: auto-close after 3 minutes max
-  clearTimeout(window._pubSafetyTimer);
-  window._pubSafetyTimer = setTimeout(cerrarPublicidad, 3 * 60 * 1000);
+    video.oncanplay = null;
+
+    // Poll de re-sync cada 5s: ajustar si se desincronizó
+    _pubSyncInterval = setInterval(async () => {
+      try {
+        const r2 = await fetch('/api/publicidad/estado');
+        const d2 = await r2.json();
+        if (!d2.mostrar_ts || !d2.server_time) return;
+        const serverNow2 = d2.server_time;
+        const elapsedExpected = serverNow2 - d2.mostrar_ts;
+        const diff = Math.abs(video.currentTime - elapsedExpected);
+        if (diff > 1.5 && elapsedExpected > 0 && elapsedExpected < video.duration) {
+          video.currentTime = elapsedExpected;
+        }
+      } catch(e){}
+    }, 5000);
+  };
+  video.onerror = () => cerrarPublicidad();
+  video.onended = () => {
+    clearInterval(_pubSyncInterval);
+    cerrarPublicidad();
+  };
+  // Safety: cerrar si el video dura más de 10 minutos
+  window._pubSafetyTimer = setTimeout(() => {
+    clearInterval(_pubSyncInterval);
+    cerrarPublicidad();
+  }, 10 * 60 * 1000);
 }
+
+function mostrarPublicidad(url) { iniciarVideoSincronizado(url, 0); }
+function mostrarPublicidadSync(url, offset) { iniciarVideoSincronizado(url, offset); }
 
 function cerrarPublicidad() {
   clearTimeout(window._pubSafetyTimer);
@@ -8531,10 +8608,15 @@ def pub_upload():
     fname = _wu.secure_filename(f.filename)
     fpath = os.path.join(VIDEOS_DIR, fname)
     f.save(fpath)
-    url = '/static/videos/' + fname
+    url = '/media/' + fname
     with lock:
         _state['publicidad_url'] = url
     return jsonify({'ok': True, 'url': url})
+
+@app.route('/media/<path:filename>')
+def serve_video(filename):
+    from flask import send_from_directory
+    return send_from_directory(VIDEOS_DIR, filename)
 
 # ── Config / PINs ───────────────────────────────────────────────────────────
 
