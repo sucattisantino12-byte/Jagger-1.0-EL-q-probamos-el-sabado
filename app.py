@@ -45,7 +45,6 @@ def save_config(cfg):
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'jagger_vip_secret_k9x_2024')
 app.permanent_session_lifetime = timedelta(hours=12)
-app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB max upload
 lock = threading.Lock()
 
 _db = {'transactions': [], 'tx_id_counter': 0, 'tarjetas': {}, 'tarjetas_conf': [], 'menu': [], 'menu_id_counter': 0}
@@ -649,6 +648,20 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
 
 <!-- PANTALLA: solo controles, sin preview de ranking -->
 <div id="tab-pantalla" class="screen">
+  <!-- Tutorial desplegable -->
+  <div style="margin-bottom:14px;">
+    <button onclick="(function(b,p){b._open=!b._open;p.style.display=b._open?'block':'none';b.querySelector('.tut-arrow').textContent=b._open?'▲':'▼';})(this,document.getElementById('tut-pantalla'))" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:#0a0b00;border:1px solid #2a2a00;border-radius:8px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#c9a227;letter-spacing:1px;cursor:pointer;text-align:left;">
+      <span>📖 Cómo usar — Control de Pantalla</span><span class="tut-arrow" style="font-size:12px;color:#556;">▼</span>
+    </button>
+    <div id="tut-pantalla" style="display:none;background:#080800;border:1px solid #1a1a00;border-radius:0 0 8px 8px;padding:14px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#aaa;line-height:1.8;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">①</span><span><strong style="color:#fff;">Hora de finalización:</strong> Configurá a qué hora termina la noche. Se muestra en el contador de la pantalla principal.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">②</span><span><strong style="color:#fff;">Mostrar Ganador:</strong> Muestra en pantalla el cliente con mayor consumo, con animación de confetti y corona.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">③</span><span><strong style="color:#fff;">Resetear noche:</strong> Borra todos los consumos del día y devuelve los saldos de tarjetas a su valor inicial. Esta acción no se puede deshacer.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">④</span><span><strong style="color:#fff;">Cerrar noche:</strong> Guarda los datos en el historial permanente antes de resetear.</span></div>
+      </div>
+    </div>
+  </div>
   <div class="config-panel">
     <div class="config-title">Manejo de pantalla</div>
     <div class="config-row">
@@ -671,6 +684,20 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
 
 <!-- PINES -->
 <div id="tab-pines" class="screen">
+  <!-- Tutorial desplegable -->
+  <div style="margin-bottom:14px;">
+    <button onclick="(function(b,p){b._open=!b._open;p.style.display=b._open?'block':'none';b.querySelector('.tut-arrow').textContent=b._open?'▲':'▼';})(this,document.getElementById('tut-pines'))" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:#0a0b00;border:1px solid #2a2a00;border-radius:8px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#c9a227;letter-spacing:1px;cursor:pointer;text-align:left;">
+      <span>📖 Cómo usar — PINs de acceso</span><span class="tut-arrow" style="font-size:12px;color:#556;">▼</span>
+    </button>
+    <div id="tut-pines" style="display:none;background:#080800;border:1px solid #1a1a00;border-radius:0 0 8px 8px;padding:14px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#aaa;line-height:1.8;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">①</span><span><strong style="color:#fff;">Cada sección tiene su propio PIN</strong> de 4 dígitos: Manager, Caja Abajo, Caja Extendido, Caja VIP y Tarjetas.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">②</span><span><strong style="color:#fff;">Cambiar un PIN:</strong> Ingresá el nuevo PIN de 4 dígitos en el campo correspondiente y tocá <strong>💾 Guardar PINs</strong>.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">③</span><span><strong style="color:#fff;">Efectos del cambio:</strong> Al guardar, todas las sesiones activas en otros dispositivos se cierran automáticamente por seguridad.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">④</span><span>Podés dejar vacíos los campos que no querés cambiar.</span></div>
+      </div>
+    </div>
+  </div>
   <div class="conf-header">
     <div class="conf-title">🔑 PINs de acceso</div>
     <div class="conf-sub">Cambiá los PINs de acceso a cada sección. Todos deben ser exactamente 4 dígitos.</div>
@@ -687,6 +714,21 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
   <div class="conf-header">
     <div class="conf-title">🎨 Personalización</div>
     <div class="conf-sub">Cambiá colores, temas y textos. Los cambios se sincronizan en tiempo real con la pantalla.</div>
+  </div>
+  <!-- Tutorial desplegable -->
+  <div style="margin-bottom:14px;">
+    <button onclick="(function(b,p){b._open=!b._open;p.style.display=b._open?'block':'none';b.querySelector('.tut-arrow').textContent=b._open?'▲':'▼';})(this,document.getElementById('tut-diseno'))" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:#0a0b00;border:1px solid #2a2a00;border-radius:8px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#c9a227;letter-spacing:1px;cursor:pointer;text-align:left;">
+      <span>📖 Cómo usar — Diseño y Personalización</span><span class="tut-arrow" style="font-size:12px;color:#556;">▼</span>
+    </button>
+    <div id="tut-diseno" style="display:none;background:#080800;border:1px solid #1a1a00;border-radius:0 0 8px 8px;padding:14px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#aaa;line-height:1.8;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">①</span><span><strong style="color:#fff;">Temas de noche:</strong> Elegí un tema especial (Jagger 12 Años, Touch of Pink, etc.) para cambiar el look completo de la pantalla de ranking.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">②</span><span><strong style="color:#fff;">Efectos de fondo:</strong> Activá burbujas, estrellas u otros efectos animados para el modo presentación.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">③</span><span><strong style="color:#fff;">Colores personalizados:</strong> Modificá cada color del sistema individualmente usando los selectores de color.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">④</span><span><strong style="color:#fff;">Textos y mensajes:</strong> Cambiá el texto del ganador, el tagline del club, el logo VIP y el mensaje del premio.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">⑤</span><span><strong style="color:#fff;">Aplicar cambios:</strong> Tocá <strong>✓ Aplicar cambios</strong> para sincronizar todo en tiempo real con la pantalla de ranking.</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- Temas especiales -->
@@ -877,18 +919,32 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
     <div class="conf-title">📺 Sistema de publicidad</div>
     <div class="conf-sub">Activá un video en la pantalla de presentación. Puede ser una URL externa o un archivo mp4 subido.</div>
   </div>
+  <!-- Tutorial desplegable -->
+  <div style="margin-bottom:14px;">
+    <button onclick="(function(b,p){b._open=!b._open;p.style.display=b._open?'block':'none';b.querySelector('.tut-arrow').textContent=b._open?'▲':'▼';})(this,document.getElementById('tut-pub'))" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:#0a0b00;border:1px solid #2a2a00;border-radius:8px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#c9a227;letter-spacing:1px;cursor:pointer;text-align:left;">
+      <span>📖 Cómo usar — Publicidad</span><span class="tut-arrow" style="font-size:12px;color:#556;">▼</span>
+    </button>
+    <div id="tut-pub" style="display:none;background:#080800;border:1px solid #1a1a00;border-radius:0 0 8px 8px;padding:14px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#aaa;line-height:1.8;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">①</span><span><strong style="color:#fff;">URL externa:</strong> Ingresá una URL directa a un archivo .mp4 y configurá cada cuántos minutos aparece en la pantalla de presentación.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">②</span><span><strong style="color:#fff;">Subir archivo:</strong> Subí un archivo .mp4 desde tu dispositivo para usarlo como publicidad.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">③</span><span><strong style="color:#fff;">Mostrar ahora:</strong> Envía el video inmediatamente a la pantalla de presentación sin esperar el intervalo configurado.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">④</span><span>La publicidad solo aparece en el modo presentación de la pantalla principal, no en las cajas.</span></div>
+      </div>
+    </div>
+  </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
     <!-- URL externa -->
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;">
       <div style="font-family:'Oswald',sans-serif;font-size:13px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">URL de video MP4</div>
       <label class="field-label">URL directa del video (.mp4)</label>
       <input id="pub-url" class="field-input" type="text" placeholder="https://ejemplo.com/video.mp4" />
-      <label class="field-label">Cada cuántos minutos aparece</label>
-      <input id="pub-frec" class="field-input" type="number" min="1" max="120" value="15" style="margin-bottom:12px;" />
-      <div class="btn-row" style="margin-top:4px;gap:10px;flex-wrap:wrap;">
-        <button onclick="activarPublicidad()" class="btn-add" style="flex:1;">▶ Activar</button>
-        <button onclick="mostrarAhora()" style="background:#1a3a1a;color:#3a9a5a;border:1px solid #2a5a2a;border-radius:7px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;" onmouseover="this.style.background='#223a22'" onmouseout="this.style.background='#1a3a1a'">📺 Mostrar ahora</button>
-        <button onclick="desactivarPublicidad()" style="background:transparent;color:#555;border:1px solid #222;border-radius:7px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='#a83030';this.style.color='#cc4444'" onmouseout="this.style.borderColor='#222';this.style.color='#555'">■ Detener</button>
+      <label class="field-label">Cada cuántos minutos aparece en pantalla</label>
+      <input id="pub-frec" class="field-input" type="number" min="1" max="120" value="15" />
+      <div class="btn-row" style="margin-top:4px;gap:10px;">
+        <button onclick="activarPublicidad()" class="btn-add">▶ Activar programa</button>
+        <button onclick="mostrarAhora()" style="background:#1a3a1a;color:#3a9a5a;border:1px solid #2a5a2a;border-radius:7px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;" onmouseover="this.style.background='#223a22'" onmouseout="this.style.background='#1a3a1a'">📺 Mostrar ahora en pantalla</button>
+        <button onclick="desactivarPublicidad()" style="background:transparent;color:#555;border:1px solid #222;border-radius:7px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='#c9a227';this.style.color='#c9a227'" onmouseout="this.style.borderColor='#222';this.style.color='#555'">■ Desactivar</button>
       </div>
     </div>
     <!-- Subir archivo -->
@@ -902,13 +958,9 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
   </div>
   <div id="pub-estado-box" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
     <span style="font-size:22px;" id="pub-estado-icon">⏸</span>
-    <div style="flex:1;">
+    <div>
       <div style="font-family:'Oswald',sans-serif;font-size:14px;color:var(--text);letter-spacing:1px;">Estado: <span id="pub-estado-txt" style="color:var(--gold);">Inactiva</span></div>
       <div id="pub-estado-url" style="font-size:11px;color:#555;margin-top:3px;"></div>
-    </div>
-    <div id="pub-cronometro-wrap" style="display:none;text-align:right;flex-shrink:0;">
-      <div style="font-size:10px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;">PRÓXIMO VIDEO</div>
-      <div id="pub-cronometro" style="font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:#aaa;letter-spacing:2px;"></div>
     </div>
   </div>
 </div>
@@ -921,6 +973,21 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
       <div>
         <div class="conf-title">🍽 Menú de productos</div>
         <div class="conf-sub">Tocá nombre o precio para editarlo. Los cambios se guardan al instante.</div>
+      </div>
+    </div>
+  </div>
+  <!-- Tutorial desplegable -->
+  <div style="margin-bottom:14px;">
+    <button onclick="(function(b,p){b._open=!b._open;p.style.display=b._open?'block':'none';b.querySelector('.tut-arrow').textContent=b._open?'▲':'▼';})(this,document.getElementById('tut-menu'))" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:#0a0b00;border:1px solid #2a2a00;border-radius:8px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#c9a227;letter-spacing:1px;cursor:pointer;text-align:left;">
+      <span>📖 Cómo usar — Menú de productos</span><span class="tut-arrow" style="font-size:12px;color:#556;">▼</span>
+    </button>
+    <div id="tut-menu" style="display:none;background:#080800;border:1px solid #1a1a00;border-radius:0 0 8px 8px;padding:14px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#aaa;line-height:1.8;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">①</span><span><strong style="color:#fff;">Editar nombre o precio:</strong> Tocá directamente sobre el nombre o precio de cualquier producto para editarlo en línea. Presioná Enter o hacé click fuera para guardar.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">②</span><span><strong style="color:#fff;">Agregar producto:</strong> Completá categoría, nombre y precio en el formulario de arriba y tocá <strong>+ Agregar</strong>.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">③</span><span><strong style="color:#fff;">Eliminar:</strong> Usá el botón ✕ al lado de cada producto para eliminarlo.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">④</span><span><strong style="color:#fff;">Restablecer menú oficial:</strong> El botón ↺ carga el menú predefinido del sistema, reemplazando todos los productos actuales.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">⑤</span><span><strong style="color:#fff;">Precios de cartel:</strong> Definí cuánto descuenta automáticamente cada tipo de cartel (virtual/físico/combo) del saldo de una tarjeta.</span></div>
       </div>
     </div>
   </div>
@@ -980,6 +1047,21 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
 
 <!-- ══ PANEL STATS ══ -->
 <div id="tab-stats" class="screen">
+  <!-- Tutorial desplegable -->
+  <div style="margin-bottom:14px;">
+    <button onclick="(function(b,p){b._open=!b._open;p.style.display=b._open?'block':'none';b.querySelector('.tut-arrow').textContent=b._open?'▲':'▼';})(this,document.getElementById('tut-stats'))" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:#0a0b00;border:1px solid #2a2a00;border-radius:8px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#c9a227;letter-spacing:1px;cursor:pointer;text-align:left;">
+      <span>📖 Cómo leer las Estadísticas</span><span class="tut-arrow" style="font-size:12px;color:#556;">▼</span>
+    </button>
+    <div id="tut-stats" style="display:none;background:#080800;border:1px solid #1a1a00;border-radius:0 0 8px 8px;padding:14px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#aaa;line-height:1.8;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">①</span><span><strong style="color:#fff;">KPIs:</strong> Total facturado en la noche, número de operaciones y el promedio por operación.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">②</span><span><strong style="color:#fff;">Gráficos:</strong> Distribución de ventas por caja y evolución del consumo por hora durante la noche.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">③</span><span><strong style="color:#fff;">Top clientes:</strong> Ranking de clientes con mayor consumo de la noche actual.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">④</span><span><strong style="color:#fff;">Historial:</strong> Tocá <strong>📊 VER HISTORIAL</strong> para acceder a los registros de noches anteriores.</span></div>
+        <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">⑤</span><span>Los datos se actualizan automáticamente cada 2 segundos.</span></div>
+      </div>
+    </div>
+  </div>
   <div class="stats-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;">
     <div>
       <div class="stats-title">Estadísticas de la noche</div>
@@ -3878,101 +3960,48 @@ async function eliminarProducto(id) {
 // ══════════════════════════════════════════
 let pubPollingMgr = null;
 
-let _pubCronometroInterval = null;
-let _pubInicioTs = 0;
-
 async function cargarEstadoPub() {
   try {
     const r = await fetch('/api/publicidad/estado');
     const d = await r.json();
     const ico = document.getElementById('pub-estado-icon');
     const txt = document.getElementById('pub-estado-txt');
-    const urlBox = document.getElementById('pub-estado-url');
-    const url = d.url || '';
+    const urlEl = document.getElementById('pub-estado-url');
     if (ico) ico.textContent = d.activa ? '▶' : '⏸';
-    if (txt) { txt.textContent = d.activa ? 'Reproduciendo' : 'Inactiva'; txt.style.color = d.activa ? '#2ecc71' : '#888'; }
-    if (urlBox) urlBox.textContent = url ? url.split('/').pop().slice(0,50) : '';
-    // Rellenar campo URL si está vacío
-    const urlInput = document.getElementById('pub-url');
-    if (urlInput && !urlInput.value && url) urlInput.value = url;
-    _pubUrlActual = url || _pubUrlActual;
-    if (d.frecuencia && document.getElementById('pub-frec') && !document.getElementById('pub-frec').matches(':focus')) {
-      document.getElementById('pub-frec').value = d.frecuencia;
+    if (txt) { txt.textContent = d.activa ? 'Activa' : 'Inactiva'; txt.style.color = d.activa ? '#2ecc71' : 'var(--gold)'; }
+    if (urlEl) urlEl.textContent = d.publicidad_url ? d.publicidad_url.slice(0,60)+(d.publicidad_url.length>60?'…':'') : '';
+    if (document.getElementById('pub-url') && !document.getElementById('pub-url').value && d.publicidad_url) {
+      document.getElementById('pub-url').value = d.publicidad_url;
     }
-    // Cronómetro: si hay mostrar_ts activo, mostrar tiempo transcurrido
-    const ts = d.mostrar_ts || 0;
-    const serverNow = d.server_time || (Date.now()/1000);
-    if (ts > 0 && d.activa) {
-      if (ts !== _pubInicioTs) {
-        _pubInicioTs = ts;
-        iniciarCronometroMgr(ts, serverNow, d.frecuencia);
-      }
-    } else {
-      detenerCronometroMgr();
+    if (document.getElementById('pub-frec') && d.frecuencia) {
+      document.getElementById('pub-frec').value = d.frecuencia;
     }
   } catch(e) {}
 }
 
-function iniciarCronometroMgr(inicioTs, serverNow, frecMinutos) {
-  clearInterval(_pubCronometroInterval);
-  const crono = document.getElementById('pub-cronometro');
-  if (!crono) return;
-  const wrap2 = document.getElementById('pub-cronometro-wrap');
-  if (wrap2) wrap2.style.display = 'block';
-  const offsetLocal = Date.now()/1000 - serverNow;
-  const frecSeg = (frecMinutos || 15) * 60;
-  function tick() {
-    const elapsed = (Date.now()/1000 - offsetLocal) - inicioTs;
-    const remaining = frecSeg - elapsed;
-    if (remaining <= 0) {
-      crono.textContent = '¡YA!';
-      crono.style.color = '#2ecc71';
-      return;
-    }
-    crono.style.color = remaining < 60 ? '#e8c84a' : '#aaa';
-    const m = Math.floor(remaining/60);
-    const s = Math.floor(remaining%60).toString().padStart(2,'0');
-    crono.textContent = m+':'+s;
-  }
-  tick();
-  _pubCronometroInterval = setInterval(tick, 500);
-}
-
-function detenerCronometroMgr() {
-  clearInterval(_pubCronometroInterval);
-  _pubInicioTs = 0;
-  const wrap = document.getElementById('pub-cronometro-wrap');
-  if (wrap) wrap.style.display = 'none';
-}
-
 async function activarPublicidad() {
-  const url = (document.getElementById('pub-url')?.value||'').trim() || _pubUrlActual;
+  const url = (document.getElementById('pub-url')?.value||'').trim();
   const frec = parseInt(document.getElementById('pub-frec')?.value||15);
   if (!url) { showToast('Ingresá una URL de video', true); return; }
   try {
     await fetch('/api/publicidad/activar', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, frecuencia:frec})});
     await cargarEstadoPub();
-    showToast('✓ Publicidad activada — aparece cada '+frec+' min');
+    showToast('Publicidad activada');
   } catch(e) { showToast('Error', true); }
 }
 
 async function mostrarAhora() {
-  const url = (document.getElementById('pub-url')?.value||'').trim() || _pubUrlActual;
-  if (!url) { showToast('Primero subí o ingresá una URL de video', true); return; }
   try {
-    await fetch('/api/publicidad/activar', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url, frecuencia: parseInt(document.getElementById('pub-frec')?.value||15)})});
     await fetch('/api/publicidad/mostrar-ahora', {method:'POST'});
-    await cargarEstadoPub();
-    showToast('📺 Video en pantalla');
+    showToast('📺 Video enviado a pantalla');
   } catch(e) { showToast('Error', true); }
 }
 
 async function desactivarPublicidad() {
   try {
     await fetch('/api/publicidad/desactivar', {method:'POST'});
-    detenerCronometroMgr();
     await cargarEstadoPub();
-    showToast('Publicidad detenida');
+    showToast('Publicidad desactivada');
   } catch(e) { showToast('Error', true); }
 }
 
@@ -4001,7 +4030,6 @@ async function subirVideoPublicidad() {
 // ══════════════════════════════════════════
 let pubLastActiva = false;
 let pubCloseTimer = null;
-let _pubUrlActual = '';
 
 async function pollPublicidad() {
   try {
@@ -4954,6 +4982,8 @@ function iniciarJagger12Deco() {
   }
 }
 
+  lanzarGuante(); setTimeout(lanzarGuante,800); setTimeout(lanzarGuante,1600);
+}
 
 function iniciarPetalos() {
   const wrap=document.getElementById('petalos-wrap'); if(!wrap) return; wrap.innerHTML='';
@@ -5768,91 +5798,71 @@ function applyClockSize(size) {
 setInterval(loadDesign, 2000);
 loadDesign();
 
-// ── Publicidad sincronizada ──
+// ── Publicidad (frecuencia) ──
 let _pubMostrarTsAnterior = 0;
-let _pubSyncInterval = null;
-
 async function checkPublicidad() {
   try {
     const r = await fetch('/api/publicidad/estado');
     const d = await r.json();
-    if (!d.url) { cerrarPublicidad(); return; }
-
+    pubFrecuenciaMs = (parseInt(d.frecuencia)||15) * 60 * 1000;
+    if (!d.url) { pubActiva = false; return; }
+    // Mostrar sincronizado: usar server_time para calcular offset exacto
     const ts = d.mostrar_ts || 0;
-    const serverNow = d.server_time || (Date.now() / 1000);
-
-    // ── Nuevo "mostrar ahora" del manager ──
     if (ts > 0 && ts !== _pubMostrarTsAnterior) {
       _pubMostrarTsAnterior = ts;
-      // Calcular cuántos segundos pasaron desde que el manager apretó
+      // Calcular cuántos segundos pasaron desde que el manager apretó el botón
+      const serverNow = d.server_time || (Date.now() / 1000);
       const offset = Math.max(0, serverNow - ts);
-      iniciarVideoSincronizado(d.url, offset);
+      mostrarPublicidadSync(d.url, offset);
       return;
     }
-
-    // ── Publicidad periódica activa ──
-    if (!d.activa) return;
-    pubFrecuenciaMs = (parseInt(d.frecuencia)||15) * 60 * 1000;
-    if (Date.now() - pubLastShown >= pubFrecuenciaMs) {
-      iniciarVideoSincronizado(d.url, 0);
+    if (!d.activa) { pubActiva = false; return; }
+    pubActiva = true;
+    const now = Date.now();
+    if (now - pubLastShown >= pubFrecuenciaMs) {
+      mostrarPublicidad(d.url);
     }
   } catch(e){}
 }
-setInterval(checkPublicidad, 1000);
+setInterval(checkPublicidad, 3000); // poll más frecuente para sincronizar mejor
 checkPublicidad();
 
-function iniciarVideoSincronizado(url, offsetSegundos) {
+function mostrarPublicidad(url) {
+  mostrarPublicidadSync(url, 0);
+}
+
+function mostrarPublicidadSync(url, offsetSegundos) {
   const overlay = document.getElementById('pub-overlay');
   const video = document.getElementById('pub-video');
-  if (!overlay || !video) return;
+  const iframe = document.getElementById('pub-iframe');
+  if (!overlay) return;
   pubLastShown = Date.now();
-
-  // Limpiar timer anterior
-  clearTimeout(window._pubSafetyTimer);
-  clearInterval(_pubSyncInterval);
-
+  if (iframe) { iframe.style.display='none'; iframe.src=''; }
+  video.style.display='block';
   overlay.classList.add('show');
-  video.style.display = 'block';
-
-  // Cargar video y hacer seek al offset para sincronizar con otras pantallas
-  video.src = url;
-  video.load();
-  video.oncanplay = function() {
-    if (offsetSegundos > 0 && video.duration && offsetSegundos < video.duration) {
+  // Si ya tenemos la misma URL cargada y el offset está dentro de la duración, hacer seek
+  if (video.src && video.src.endsWith(url.replace(/^.*\//,'')) && video.readyState >= 2) {
+    if (offsetSegundos > 0 && offsetSegundos < video.duration) {
       video.currentTime = offsetSegundos;
     }
     video.play().catch(()=>{});
-    video.oncanplay = null;
-
-    // Poll de re-sync cada 5s: ajustar si se desincronizó
-    _pubSyncInterval = setInterval(async () => {
-      try {
-        const r2 = await fetch('/api/publicidad/estado');
-        const d2 = await r2.json();
-        if (!d2.mostrar_ts || !d2.server_time) return;
-        const serverNow2 = d2.server_time;
-        const elapsedExpected = serverNow2 - d2.mostrar_ts;
-        const diff = Math.abs(video.currentTime - elapsedExpected);
-        if (diff > 1.5 && elapsedExpected > 0 && elapsedExpected < video.duration) {
-          video.currentTime = elapsedExpected;
-        }
-      } catch(e){}
-    }, 5000);
-  };
-  video.onerror = () => cerrarPublicidad();
-  video.onended = () => {
-    clearInterval(_pubSyncInterval);
-    cerrarPublicidad();
-  };
-  // Safety: cerrar si el video dura más de 10 minutos
-  window._pubSafetyTimer = setTimeout(() => {
-    clearInterval(_pubSyncInterval);
-    cerrarPublicidad();
-  }, 10 * 60 * 1000);
+  } else {
+    video.src = url;
+    video.oncanplay = function() {
+      if (offsetSegundos > 0 && offsetSegundos < video.duration) {
+        video.currentTime = offsetSegundos;
+      }
+      video.play().catch(()=>{});
+      video.oncanplay = null;
+    };
+    video.load();
+  }
+  video.onended = cerrarPublicidad;
+  video.onerror = function() { cerrarPublicidad(); };
+  // Safety timeout: auto-close after 3 minutes max
+  clearTimeout(window._pubSafetyTimer);
+  window._pubSafetyTimer = setTimeout(cerrarPublicidad, 3 * 60 * 1000);
 }
-
-function mostrarPublicidad(url) { iniciarVideoSincronizado(url, 0); }
-function mostrarPublicidadSync(url, offset) { iniciarVideoSincronizado(url, offset); }
 
 function cerrarPublicidad() {
   clearTimeout(window._pubSafetyTimer);
@@ -5985,7 +5995,7 @@ body{background:var(--black);color:var(--text);font-family:'Rajdhani',sans-serif
 </head>
 <body>
 <div style="background:#fbbf24;color:#000;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;padding:18px 24px;border-radius:0;width:100%;line-height:1.5;letter-spacing:0.5px;">
-  ⚠️ ATENCIÓN IMPORTANTE: SIEMPRE GUARDAR LA CONFIGURACIÓN DESPUÉS DE CADA REGISTRO DE TARJETA. SI LA USÁS SIN GUARDAR, EL SISTEMA NO RECONOCERÁ EL SALDO AUNQUE APAREZCA EN PANTALLA.
+  ⚠️ IMPORTANTE: GUARDAR SIEMPRE SINO NO SE RECONOCERA LA TARJETA
 </div>
 <div class="top-bar">
   <div class="top-title">💳 Configuración de Tarjetas</div>
@@ -5998,6 +6008,21 @@ body{background:var(--black);color:var(--text);font-family:'Rajdhani',sans-serif
   <button class="btn-guardar" onclick="guardarTarjetas()">💾 Guardar configuración</button>
   <button class="btn-limpiar" onclick="limpiarTarjetas()">Limpiar todo</button>
   <div class="scan-badge" id="scan-badge">▤ Lector listo</div>
+</div>
+<!-- ── TUTORIAL TARJETAS ── -->
+<div style="margin:12px 20px 0;">
+  <button onclick="(function(b,p){b._open=!b._open;p.style.display=b._open?'block':'none';b.querySelector('.tut-arrow').textContent=b._open?'▲':'▼';})(this,document.getElementById('tut-tarjetas'))" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:#0a1500;border:1px solid #2a4a00;border-radius:8px;padding:12px 18px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#8acc50;letter-spacing:1px;cursor:pointer;text-align:left;">
+    <span>📖 Cómo usar — Tarjetas</span><span class="tut-arrow" style="font-size:12px;color:#556;">▼</span>
+  </button>
+  <div id="tut-tarjetas" style="display:none;background:#080f00;border:1px solid #1a3a00;border-radius:0 0 8px 8px;padding:16px 20px;font-family:'Rajdhani',sans-serif;font-size:14px;color:#aaa;line-height:1.8;letter-spacing:0.3px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#8acc50;font-size:18px;flex-shrink:0;">1</span><span><strong style="color:#c9a227;">Asignale un slot a cada tarjeta:</strong> Cada tarjeta física corresponde a una mesa. Usá el botón <strong>LEER</strong> en el slot correcto y pasá la tarjeta por el lector.</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#8acc50;font-size:18px;flex-shrink:0;">2</span><span><strong style="color:#c9a227;">Confirmá la vinculación:</strong> Después de leer la tarjeta, aparece el botón <strong>CONFIRMAR</strong>. Apretalo para registrar la tarjeta en ese slot.</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#8acc50;font-size:18px;flex-shrink:0;">3</span><span><strong style="color:#c9a227;">Completá nombre y saldo inicial:</strong> Ingresá el nombre del cliente y el saldo inicial (crédito disponible para esa mesa).</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#8acc50;font-size:18px;flex-shrink:0;">4</span><span><strong style="color:#c9a227;">⚠ SIEMPRE GUARDAR:</strong> Tocá <strong>💾 Guardar configuración</strong> después de cada cambio. Sin guardar, el sistema no reconocerá la tarjeta.</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;"><span style="color:#8acc50;font-size:18px;flex-shrink:0;">5</span><span><strong style="color:#c9a227;">Verificación:</strong> Podés pasar cualquier tarjeta sin tener ningún slot activo para verificar si está vinculada.</span></div>
+    </div>
+  </div>
 </div>
 <div style="background:#0d1500;border:1px solid #2a4a00;border-radius:8px;padding:12px 20px;margin:12px 20px 0;font-family:'Rajdhani',sans-serif;font-size:14px;color:#8acc50;letter-spacing:0.5px;line-height:1.6;">
   💡 <strong>Nota multi-tarjeta:</strong> Si una persona tiene más de una tarjeta registrada con el mismo nombre, sus consumos se suman en el ranking y se muestra la mesa de número más bajo.
@@ -6331,6 +6356,27 @@ body{background:var(--black);color:var(--text);font-family:'Rajdhani',sans-serif
   <div class="modo-tab" id="mtab-recargar" onclick="setModo('recargar')" style="color:#3a9a5a;">⊕ Recargar</div>
 </div>
 
+<!-- ── TUTORIAL CAJA ── -->
+<div style="margin:8px 12px 0;">
+  <button onclick="(function(b,p){b._open=!b._open;p.style.display=b._open?'block':'none';b.querySelector('.tut-arrow').textContent=b._open?'▲':'▼';})(this,document.getElementById('tut-caja'))" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:#0a0f00;border:1px solid #2a2a00;border-radius:8px;padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#c9a227;letter-spacing:1px;cursor:pointer;text-align:left;">
+    <span>📖 Cómo usar esta caja</span><span class="tut-arrow" style="font-size:12px;color:#556;">▼</span>
+  </button>
+  <div id="tut-caja" style="display:none;background:#080800;border:1px solid #1a1a00;border-radius:0 0 8px 8px;padding:14px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#aaa;line-height:1.8;letter-spacing:0.3px;">
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="font-size:12px;color:#c9a227;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:4px;">💳 Con Tarjeta</div>
+      <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">①</span><span>Pasá la tarjeta por el lector — se carga automáticamente la mesa y el saldo.</span></div>
+      <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">②</span><span>Seleccioná los productos del menú. Al tocar un producto lo agregás al pedido. Tocá de nuevo para sumar más unidades.</span></div>
+      <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">③</span><span>En el cuadrado del producto: si hay <strong>1 unidad</strong>, aparece una ✕ para eliminar directo. Con <strong>2 o más</strong>, podés sumar o restar con los botones + / −.</span></div>
+      <div style="display:flex;gap:10px;"><span style="color:#c9a227;flex-shrink:0;">④</span><span>Tocá <strong>✓ Cobrar</strong> o presioná <strong>Enter</strong> para confirmar el pedido.</span></div>
+      <div style="font-size:12px;color:#3a9a5a;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:6px;margin-bottom:4px;">✎ Sin Tarjeta</div>
+      <div style="display:flex;gap:10px;"><span style="color:#3a9a5a;flex-shrink:0;">①</span><span>Ingresá nombre y mesa del cliente, luego seleccioná productos igual que con tarjeta.</span></div>
+      <div style="display:flex;gap:10px;"><span style="color:#3a9a5a;flex-shrink:0;">②</span><span>El pedido se registra sin descontar saldo de tarjeta, pero suma al ranking.</span></div>
+      <div style="font-size:12px;color:#3a6a9a;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:6px;margin-bottom:4px;">⊕ Recargar</div>
+      <div style="display:flex;gap:10px;"><span style="color:#3a6a9a;flex-shrink:0;">①</span><span>Pasá la tarjeta y luego ingresá el monto a agregar al saldo de esa mesa.</span></div>
+    </div>
+  </div>
+</div>
+
 <!-- ── CON TARJETA ── -->
 <div class="modo-content active" id="mc-tarjeta">
   <!-- Scan zone -->
@@ -6434,7 +6480,7 @@ body{background:var(--black);color:var(--text);font-family:'Rajdhani',sans-serif
     <span class="cb-tag">✎ Sin tarjeta</span>
     <span class="cb-total" id="cb-total-manual">$0</span>
     <button class="btn-cancel" onclick="limpiarPedido('manual')" title="Cancelar">✕</button>
-    <button class="btn-cobrar-ok" onclick="confirmarManual()">✓ Registrar</button>
+    <button class="btn-cobrar-ok" id="btn-cobrar-manual" onclick="confirmarManual()">✓ Registrar</button>
   </div>
 </div>
 
@@ -6561,8 +6607,18 @@ document.addEventListener('keydown', e => {
   const now2 = Date.now();
   lastKeyTime = now2;
   if (e.key === 'Enter') {
-    if (globalBuffer.length > 1) handleScan(globalBuffer.trim());
+    if (globalBuffer.length > 1) { handleScan(globalBuffer.trim()); globalBuffer = ''; return; }
     globalBuffer = '';
+    // Enter sin buffer: confirmar pedido activo si hay items
+    const modoT = document.getElementById('mtab-tarjeta')?.classList.contains('active');
+    const modoM = document.getElementById('mtab-manual')?.classList.contains('active');
+    if (modoT) {
+      const btn = document.getElementById('btn-cobrar-tarjeta');
+      if (btn && !btn.disabled) { e.preventDefault(); confirmarTarjeta(); }
+    } else if (modoM) {
+      const bar = document.getElementById('confirm-bar-manual');
+      if (bar && bar.classList.contains('show')) { e.preventDefault(); confirmarManual(); }
+    }
     return;
   }
   if (e.key.length === 1) globalBuffer += e.key;
@@ -6784,8 +6840,18 @@ function renderMenuProds(side) {
   if (!filtered.length) { el.innerHTML='<div style="padding:16px;color:#444;font-size:13px;letter-spacing:1px;grid-column:1/-1;">Sin resultados</div>'; return; }
   el.innerHTML = filtered.map(p => {
     const qty = order[p.id]||0;
+    let overlay = '';
+    if (qty === 1) {
+      overlay = `<div onclick="event.stopPropagation();changeQty('${side}',${p.id},-1)" style="position:absolute;top:5px;right:6px;width:22px;height:22px;background:#3a0000;border:1px solid #a83030;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:#e74c3c;line-height:1;z-index:10;" title="Eliminar">✕</div>`;
+    } else if (qty >= 2) {
+      overlay = `<div style="position:absolute;top:5px;right:6px;display:flex;align-items:center;gap:3px;z-index:10;" onclick="event.stopPropagation()">
+        <button onclick="changeQty('${side}',${p.id},-1)" style="width:20px;height:20px;background:#1a1a1a;border:1px solid #555;border-radius:4px;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;font-family:'Oswald',sans-serif;padding:0;">−</button>
+        <button onclick="changeQty('${side}',${p.id},1)" style="width:20px;height:20px;background:#1a3a00;border:1px solid #3a6a00;border-radius:4px;color:#8acc50;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;font-family:'Oswald',sans-serif;padding:0;">+</button>
+      </div>`;
+    }
     return `<div class="prod-btn${qty>0?' selected':''}" onclick="addToOrder('${side}',${p.id})">
       ${qty>0?`<div class="prod-qty-badge">${qty}</div>`:''}
+      ${overlay}
       <div class="prod-cat">${esc(p.categoria)}</div>
       <div class="prod-name">${esc(p.nombre)}</div>
       <div class="prod-price">${fmt(p.precio)}</div>
@@ -8608,15 +8674,10 @@ def pub_upload():
     fname = _wu.secure_filename(f.filename)
     fpath = os.path.join(VIDEOS_DIR, fname)
     f.save(fpath)
-    url = '/media/' + fname
+    url = '/static/videos/' + fname
     with lock:
         _state['publicidad_url'] = url
     return jsonify({'ok': True, 'url': url})
-
-@app.route('/media/<path:filename>')
-def serve_video(filename):
-    from flask import send_from_directory
-    return send_from_directory(VIDEOS_DIR, filename)
 
 # ── Config / PINs ───────────────────────────────────────────────────────────
 
