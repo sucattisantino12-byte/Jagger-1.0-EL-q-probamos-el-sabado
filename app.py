@@ -9,6 +9,7 @@ CONFIG_FILE   = os.path.join(_BASE_DIR, 'config.json')
 DATA_FILE     = os.path.join(_BASE_DIR, 'data.json')
 HISTORIAL_FILE = os.path.join(_BASE_DIR, 'historial.json')
 VIDEOS_DIR    = os.path.join(_BASE_DIR, 'static_videos')
+STATE_FILE    = os.path.join(_BASE_DIR, 'state.json')
 os.makedirs(VIDEOS_DIR, exist_ok=True)
 
 CAJA_NOMBRES = {1: 'Abajo', 2: 'Extendido', 3: 'VIP'}
@@ -98,6 +99,40 @@ _state = {
         'falling_gloves': True,
     },
 }
+
+# Claves del state que se persisten en disco (excluye timestamps efímeros)
+_STATE_PERSIST_KEYS = {
+    'hora_fin', 'premio', 'cartel_precios',
+    'publicidad_activa', 'publicidad_url', 'publicidad_frecuencia',
+    'design',
+}
+
+def save_state():
+    """Persiste las claves importantes del _state en disco."""
+    try:
+        data = {k: _state[k] for k in _STATE_PERSIST_KEYS if k in _state}
+        with open(STATE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+def load_state():
+    """Carga el state persistido del disco al arrancar."""
+    if not os.path.exists(STATE_FILE):
+        return
+    try:
+        with open(STATE_FILE, 'r', encoding='utf-8') as f:
+            saved = json.load(f)
+        for k, v in saved.items():
+            if k in _state:
+                if k == 'design' and isinstance(_state['design'], dict) and isinstance(v, dict):
+                    _state['design'].update(v)
+                else:
+                    _state[k] = v
+    except Exception:
+        pass
+
+load_state()  # Cargar al iniciar
 
 def load_data():
     return _db
@@ -2251,9 +2286,10 @@ function renderCajaInner(caja) {
   const ta = window['cajaState'+caja];
   let tarjetaHTML = '';
   if (ta) {
-    const pct = ta.saldo_inicial>0 ? Math.max(0,Math.round((ta.saldo_actual/ta.saldo_inicial)*100)) : 0;
+    const techoReal = Math.max(ta.saldo_inicial, ta.saldo_actual);
+    const pct = techoReal > 0 ? Math.max(0, Math.min(100, Math.round((ta.saldo_actual/techoReal)*100))) : 0;
     const sinSaldo = ta.saldo_actual <= 0;
-    const pctSaldo = ta.saldo_inicial > 0 ? ta.saldo_actual / ta.saldo_inicial : 1;
+    const pctSaldo = techoReal > 0 ? ta.saldo_actual / techoReal : 1;
     const warnSaldo = !sinSaldo && pctSaldo <= 0.2;
     tarjetaHTML = `<div class="tarjeta-card visible ${sinSaldo?'sin-saldo':''}">
       <div class="tarjeta-top">
@@ -6668,13 +6704,15 @@ function renderTarjeta() {
     if (!ta) { el.className='tarjeta-card'; el.innerHTML=''; return; }
     const pedidoActual = calcTotalActual();
     const totalGastado = totalGastadoSesion + pedidoActual;
-    const excede = ta.saldo_inicial > 0 && totalGastado > ta.saldo_inicial;
+    // Usar saldo_actual como techo real (puede ser > saldo_inicial si hubo recargas)
+    const techoReal = Math.max(ta.saldo_inicial, ta.saldo_actual);
+    const excede = ta.saldo_actual > 0 && totalGastado > ta.saldo_actual;
     const sinSaldo = ta.saldo_actual <= 0;
     // La barra muestra el saldo restante tras el pedido actual (baja mientras se agregan items)
     const saldoTrasBar = Math.max(0, ta.saldo_actual - pedidoActual);
-    const pct = ta.saldo_inicial > 0 ? Math.max(0, Math.round((saldoTrasBar / ta.saldo_inicial) * 100)) : 0;
+    const pct = techoReal > 0 ? Math.max(0, Math.min(100, Math.round((saldoTrasBar / techoReal) * 100))) : 0;
     const saldoTrasComp = ta.saldo_actual - pedidoActual;
-    const pctRest = ta.saldo_inicial > 0 ? ta.saldo_actual / ta.saldo_inicial : 1;
+    const pctRest = techoReal > 0 ? ta.saldo_actual / techoReal : 1;
     const warnBajo = !excede && !sinSaldo && pctRest <= 0.3;
     const saldoColor = excede ? '#ff4444' : warnBajo ? '#ffaa00' : 'var(--gold)';
     el.className = 'tarjeta-card visible'+(sinSaldo?' sin-saldo':'');
@@ -7917,6 +7955,7 @@ def set_state():
     with lock:
         if 'hora_fin' in body: _state['hora_fin'] = str(body['hora_fin'])
         if 'premio' in body: _state['premio'] = str(body['premio'])
+        save_state()
     return jsonify({'ok': True})
 
 @app.route('/api/winner/show', methods=['POST'])
@@ -7970,6 +8009,7 @@ def set_cartel_precios():
                     _state['cartel_precios'][k] = float(body[k])
                 except (ValueError, TypeError):
                     pass
+        save_state()
     return jsonify({'ok': True})
 
 @app.route('/api/cerrar_noche', methods=['POST'])
@@ -8654,12 +8694,14 @@ def pub_activar():
         _state['publicidad_activa'] = True
         _state['publicidad_url'] = str(body.get('url', _state['publicidad_url']))
         _state['publicidad_frecuencia'] = int(body.get('frecuencia', _state['publicidad_frecuencia']))
+        save_state()
     return jsonify({'ok': True})
 
 @app.route('/api/publicidad/desactivar', methods=['POST'])
 def pub_desactivar():
     with lock:
         _state['publicidad_activa'] = False
+        save_state()
     return jsonify({'ok': True})
 
 @app.route('/api/publicidad/mostrar-ahora', methods=['POST'])
@@ -8683,6 +8725,7 @@ def pub_upload():
     url = '/api/publicidad/video/' + fname
     with lock:
         _state['publicidad_url'] = url
+        save_state()
     return jsonify({'ok': True, 'url': url})
 
 @app.route('/api/publicidad/video/<path:filename>')
@@ -8742,6 +8785,7 @@ def set_design():
         if updated:
             import time as _t
             _state['design']['_ts'] = _t.time()
+            save_state()
     return jsonify({'ok': True})
 
 if __name__ == '__main__':
