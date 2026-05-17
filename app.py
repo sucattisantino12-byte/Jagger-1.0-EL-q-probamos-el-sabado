@@ -933,10 +933,15 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
       </div>
     </div>
   </div>
+  <!-- Aviso Railway -->
+  <div style="background:#1a0a00;border:1px solid #a85000;border-radius:8px;padding:12px 18px;margin-bottom:16px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#e8a060;letter-spacing:0.5px;line-height:1.6;">
+    ⚠️ <strong>En Railway:</strong> Si subís un archivo, se borra al reiniciar el servidor porque Railway no tiene filesystem persistente. <strong>Usá siempre una URL externa</strong> (Google Drive, Dropbox, etc.) para que funcione siempre. Si tenés un Railway Volume montado en <code>/data</code>, la subida sí persiste.
+  </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
     <!-- URL externa -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;">
-      <div style="font-family:'Oswald',sans-serif;font-size:13px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">URL de video MP4</div>
+    <div style="background:var(--surface);border:1px solid #2a5a00;border-radius:10px;padding:18px 20px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:13px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">✅ URL de video MP4 <span style="font-size:11px;color:#3a9a5a;letter-spacing:1px;">(RECOMENDADO)</span></div>
+      <div style="font-size:12px;color:#555;margin-bottom:12px;font-family:'Rajdhani',sans-serif;">Usá un link directo a un .mp4 (Google Drive link directo, Dropbox, servidor propio, etc.)</div>
       <label class="field-label">URL directa del video (.mp4)</label>
       <input id="pub-url" class="field-input" type="text" placeholder="https://ejemplo.com/video.mp4" />
       <label class="field-label">Cada cuántos minutos aparece en pantalla</label>
@@ -948,8 +953,9 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
       </div>
     </div>
     <!-- Subir archivo -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;">
-      <div style="font-family:'Oswald',sans-serif;font-size:13px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Subir archivo mp4</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;opacity:0.7;">
+      <div style="font-family:'Oswald',sans-serif;font-size:13px;color:#666;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">⚠️ Subir archivo mp4</div>
+      <div style="font-size:12px;color:#a85000;margin-bottom:12px;font-family:'Rajdhani',sans-serif;font-weight:700;">Solo funciona si tenés Railway Volume en /data. Sin volumen, el archivo se borra al reiniciar.</div>
       <label class="field-label">Seleccioná un archivo mp4</label>
       <input id="pub-file" type="file" accept="video/mp4,.mp4" style="width:100%;background:#0d0d0d;border:1px solid var(--border);border-radius:7px;color:var(--text);padding:10px 12px;font-family:'Rajdhani',sans-serif;font-size:13px;margin-bottom:14px;" />
       <button onclick="subirVideoPublicidad()" class="btn-add">⬆ Subir y usar este video</button>
@@ -5210,8 +5216,8 @@ body{background:var(--black);color:var(--text);font-family:'Rajdhani',sans-serif
 .pres-clock-time{font-family:'Oswald',sans-serif;font-size:32px;color:#fff;font-weight:700;line-height:1.1;}
 .pres-clock-fin{font-size:11px;color:var(--gold-dim);letter-spacing:1px;margin-top:6px;text-transform:uppercase;}
 .pres-clock-fin-val{font-family:'Oswald',sans-serif;font-size:26px;color:var(--gold);font-weight:700;line-height:1.1;display:block;}
-.pres-header{text-align:center;padding-top:6px;}
-.pres-logo{font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;color:#fff;letter-spacing:10px;text-transform:uppercase;display:block;width:100%;}
+.pres-header{text-align:center;padding-top:6px;display:flex;flex-direction:column;align-items:center;}
+.pres-logo{font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;color:#fff;letter-spacing:10px;text-transform:uppercase;display:block;width:100%;text-align:center;}
 .pres-logo .vip{color:var(--gold);}
 .pres-line{height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:10px auto;max-width:100%;}
 .live-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid #2a2a2a;border-radius:20px;padding:4px 14px;font-size:11px;color:#777;letter-spacing:1px;margin-top:4px;}
@@ -5352,7 +5358,7 @@ body.tema-touchofpink.pink-claro .col-puesto{color:#eeaad8;}
   </div>
   <div class="pres-header">
     <div class="pres-logo" id="main-logo">RANKING <span class="vip" id="logo-vip">VIP</span></div>
-    <div id="tema-tagline" style="font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:600;color:#555;letter-spacing:5px;text-transform:uppercase;text-align:center;min-height:0;">JAGGER CLUB</div>
+    <div id="tema-tagline" style="font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:600;color:#555;letter-spacing:5px;text-transform:uppercase;text-align:center;min-height:0;width:100%;display:block;">JAGGER CLUB</div>
     <div class="pres-line"></div>
     <div class="live-badge"><span class="live-dot"></span> EN VIVO</div>
   </div>
@@ -8239,7 +8245,7 @@ def export_excel():
         nfmt(ws3.cell(row=r3, column=4), t['amount'])
         caja_num = int(t.get('caja', 1))
         ws3.cell(row=r3, column=5, value=CAJA_NOMBRES.get(caja_num, f'Caja {caja_num}'))
-        items_str = ', '.join(f"{it['qty']}x {it['nombre']}" for it in t.get('items', []))
+        items_str = ', '.join(f"{it.get('cantidad', it.get('qty', 1))}x {it['nombre']}" for it in t.get('items', []))
         ws3.cell(row=r3, column=6, value=items_str)
         set_row(ws3, r3, 1, 6, alt=(i % 2 == 0))
         r3 += 1
@@ -8360,7 +8366,7 @@ def export_gsheets():
                 ['Hora', 'Nombre', 'Mesa', 'Monto ($)', 'Caja', 'Items'],
             ] + [[t.get('time',''), t['name'], t.get('mesa',''), t['amount'],
                   CAJA_NOMBRES.get(int(t.get('caja',1)), f"Caja {t.get('caja',1)}"),
-                  ', '.join(f"{it['qty']}x {it['nombre']}" for it in t.get('items',[]))]
+                  ', '.join(f"{it.get('cantidad', it.get('qty', 1))}x {it['nombre']}" for it in t.get('items',[]))]
                  for t in noche.get('transactions',[])]
             ws.update('A1', rows)
         except Exception as e:
@@ -8674,10 +8680,15 @@ def pub_upload():
     fname = _wu.secure_filename(f.filename)
     fpath = os.path.join(VIDEOS_DIR, fname)
     f.save(fpath)
-    url = '/static/videos/' + fname
+    url = '/api/publicidad/video/' + fname
     with lock:
         _state['publicidad_url'] = url
     return jsonify({'ok': True, 'url': url})
+
+@app.route('/api/publicidad/video/<path:filename>')
+def serve_video(filename):
+    from flask import send_from_directory
+    return send_from_directory(VIDEOS_DIR, filename)
 
 # ── Config / PINs ───────────────────────────────────────────────────────────
 
